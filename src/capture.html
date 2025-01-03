@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PostureCorrector</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="icons/bird16.png">
+        <link rel="stylesheet" href="styles/capture-styles.css">
+    </head>
+    <body>
+        <header>
+            <h1 class="title"><img src="icons/bird128.png" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
+        </header>
+        <main>
+            <section class="data-section">
+                <div class="data">
+                    <p>Head Pitch Angle:</p>
+                    <p id="pitch">-- degrees</p>
+                </div>
+                <div class="data">
+                    <p>Head-Webcam Distance:</p>
+                    <p id="distance">-- cm</p>
+                </div>
+                <div class="data">
+                    <p>Consecutive Bad Posture Duration:</p>
+                    <p id="time">0 seconds</p>
+                </div>
+            </section>
+
+            <section class="error-section">
+                <p id="webgl-error"></p>
+            </section>
+            
+            <section class="video-section">
+                <video id="webcam" autoplay playsinline></video>
+            </section>
+        </main>
+        
+        <iframe id="sandboxFrame" src="sandbox.html" sandbox="allow-scripts allow-same-origin" style="display: none;"></iframe>
+        <script src="capture.js"></script>
+    </body>
+</html>

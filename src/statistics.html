@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PostureCorrector</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="icons/bird16.png">
+        <link rel="stylesheet" href="styles/statistics-styles.css">
+        <script src="node_modules/chart.js/dist/chart.umd.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1 class="title"><img src="icons/bird128.png" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
+        </header>
+        <main>
+            <section class="stats-section">
+                <div class="stat">
+                    <p>Longest Consecutive Good Posture Duration:</p>
+                    <p id="longestGoodPosture">0h 00m</p>
+                </div>
+                <div class="stat">
+                    <p>Lowest Bad Posture Percentage:</p>
+                    <p id="lowestBadPosture">0%</p>
+                </div>
+                <div class="stat">
+                    <p>Highest Bad Posture Percentage:</p>
+                    <p id="highestBadPosture">0%</p>
+                </div>
+            </section>
+            
+            <section class="chart-section">
+                <div class="chart-container line-chart">
+                    <canvas id="myChart"></canvas>
+                </div>
+                <div class="side-by-side-charts">
+                    <div class="chart-container time-window-chart">
+                        <canvas id="timeWindowChart"></canvas>
+                    </div>
+                    <div class="chart-container activity-chart">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <script src="statistics.js"></script>
+    </body>
+</html>
