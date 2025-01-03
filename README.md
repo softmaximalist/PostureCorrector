@@ -8,8 +8,9 @@ This repository is for code review purposes only.
 - All rights are reserved by the author
 - The code is shared publicly solely for portfolio/review purposes
 
-## Website Link
-- https://posturecorrector.vercel.app/
+## Links
+- [Product website](https://posturecorrector.vercel.app/)
+- [Chrome webstore page](https://chromewebstore.google.com/detail/posturecorrector-ai-postu/glbckpboobaemcfljiijgndjlkcokppi?authuser=1&hl=en)
 
 ## Chrome extension files
 ### manifest.json
