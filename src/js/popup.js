@@ -16,7 +16,6 @@ async function getAllWebcams() {
     return videoDevices;
 }
 
-
 async function createWebcamDropdown() {
     const webcams = await getAllWebcams();
     dropdown.innerHTML = ''; // Clear existing options
@@ -42,7 +41,6 @@ async function createWebcamDropdown() {
     }
 }
 
-
 function handleWebcamSelection(event) {
     // selectedDeviceId = dropdown.value;
     const selectedDeviceId = event.target.value;
@@ -50,9 +48,7 @@ function handleWebcamSelection(event) {
     chrome.runtime.sendMessage({ type: 'webcamSelected', selectedWebcam: selectedDeviceId });
 }
 
-
 dropdown.addEventListener('change', handleWebcamSelection);
-
 
 // document.querySelectorAll('.toggle-switch input').forEach((checkbox) => {
 //     checkbox.addEventListener('change', function() {
@@ -77,7 +73,6 @@ document.getElementById('powerSwitch').addEventListener('change', function() {
     chrome.runtime.sendMessage({ type: 'powerButton', powerState: isOn });
 });
 
-
 speedRadioButtons.forEach(radio => {
     radio.addEventListener('change', () => {
         if (radio.checked) {
@@ -87,7 +82,6 @@ speedRadioButtons.forEach(radio => {
         }
     });
 });
-
 
 warningRadioButtons.forEach(radio => {
     radio.addEventListener('change', () => {
@@ -99,7 +93,6 @@ warningRadioButtons.forEach(radio => {
     });
 });
 
-
 activityRadioButtons.forEach(radio => {
     radio.addEventListener('change', () => {
         if (radio.checked) {
@@ -109,7 +102,6 @@ activityRadioButtons.forEach(radio => {
         }
     });
 });
-
 
 saveGoodPostureButton.addEventListener('click', () => {
     if (webcamRunning && currentProcessingSpeed && currentWarningMethod && currentActivity) {
@@ -128,7 +120,6 @@ saveGoodPostureButton.addEventListener('click', () => {
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     }
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
     createWebcamDropdown();

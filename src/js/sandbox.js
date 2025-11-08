@@ -3,9 +3,6 @@ This file receives webcam video frames from capture.js and process them to detec
 For each frame sent by capture.js, sandbox.js returns back some data which includes the consecutive
 bad posture duration. 
 */
-import { FaceLandmarker, FilesetResolver } from "./node_modules/@mediapipe/tasks-vision/vision_bundle.mjs";
-
-
 let faceLandmarker = null;
 let goodHeadPitchAngleObtained = false;
 let goodHeadPitchAngle = null;
@@ -21,17 +18,28 @@ let currentWarningMethod;
 let warnedUser = false;
 let width, height;
 let canvas, context;
-cv = await cv;
+let cv;
+let urls = {};
+let isFullyInitialized = false;
 
+function loadScript(url) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = url;
+        script.async = true; // Ensure script is loaded asynchronously
+        script.onload = resolve;
+        script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
+        document.head.appendChild(script);
+    });
+}
 
 async function createFaceLandmarker() {
     try {
-        const filesetResolver = await FilesetResolver.forVisionTasks(
-            "./node_modules/@mediapipe/tasks-vision/wasm"
-        );
+        const { FaceLandmarker, FilesetResolver } = await import(urls.mediapipeVisionBundle);
+        const filesetResolver = await FilesetResolver.forVisionTasks(urls.mediapipeWasmDir);
         faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
             baseOptions: {
-                modelAssetPath: "face_landmarker.task",
+                modelAssetPath: urls.mediapipeModel,
             },
             runningMode: "IMAGE",
             numFaces: 1,
@@ -42,15 +50,26 @@ async function createFaceLandmarker() {
         console.error("Error creating FaceLandmarker: ", error);
         setTimeout(createFaceLandmarker, 5000);
     }
-
-    setupEventListener();
-}
-
-createFaceLandmarker();        
+}   
 
 function setupEventListener() {
-    window.addEventListener('message', (event) => {
-        if (event.data.type === 'saveGoodPosture') {
+    window.addEventListener('message', async (event) => {
+        if (event.data.type === 'initUrls') {
+            try {
+                urls = event.data.urls;
+                await loadScript(urls.opencvJs);
+                // Now 'cv' is available on the global scope (window)
+                cv = await new Promise((resolve) => {
+                    window.cv['onRuntimeInitialized'] = () => {
+                        resolve(window.cv);
+                    };
+                });
+                await createFaceLandmarker();
+                window.parent.postMessage({ type: 'sandboxIsReady' }, '*');
+            } catch (error) {
+                console.error("Failed to load or initialize scripts:", error);
+            }
+        } else if (event.data.type === 'saveGoodPosture') {
             goodHeadWebcamDistance = headWebcamDistance;
             goodHeadPitchAngle = headPitchAngle;
             goodHeadPitchAngleObtained = true;
@@ -87,9 +106,11 @@ function setupEventListener() {
         }
     });
 
-    window.parent.postMessage({ type: 'sandboxIsReady'}, '*');
+    // window.parent.postMessage({ type: 'sandboxIsReady'}, '*');
+    window.parent.postMessage({ type: 'sandboxListenerReady' }, '*');
 }
 
+setupEventListener();
 
 function processFrame() {
     try {

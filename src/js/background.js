@@ -71,7 +71,6 @@ function initializeGlobalVariables() {
 
 initializeGlobalVariables();
 
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'webcamSelected' && message.selectedWebcam !== currentSelectedWebcam) {
         sendWebcamInfoToCapture(message.selectedWebcam);
@@ -191,8 +190,10 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 
 function openCaptureTab() {
+    // Use chrome.runtime.getURL to get the full extension URL from the root
+    const captureUrl = chrome.runtime.getURL('src/html/capture.html');
     chrome.windows.getCurrent((window) => {
-        chrome.tabs.create({ url: 'capture.html', active: false }, (tab) => {
+        chrome.tabs.create({ url: captureUrl, active: false }, (tab) => {
             try {
                 captureTabId = tab.id;
                 chrome.storage.local.set({ captureTabId: captureTabId });
@@ -254,7 +255,7 @@ function sendWarningNotification() {
         title: 'Bad Posture Warning',
         message: 'Bad posture has been detected for more than 5 seconds. Please correct your posture.',
         priority: 2,
-        iconUrl: 'icons/bird128.png'
+        iconUrl: '../../icons/bird128.png'
     });
 }
 
@@ -266,7 +267,7 @@ function sendErrorOccuredNotification() {
         message: "An error has occured while processing the video frames. \
          Please wait for the extension to fix the problem or restart the PostureCorrector extension.",
         priority: 2,
-        iconUrl: 'icons/bird128.png'
+        iconUrl: '../../icons/bird128.png'
     });
 }
 
@@ -277,7 +278,7 @@ function sendErrorResolvedNotification() {
         title: 'PostureCorrector: Error resolved',
         message: "PostureCorrector has resolved the error that occured earlier. You can continue using the extensin as usual.",
         priority: 2,
-        iconUrl: 'icons/bird128.png'
+        iconUrl: '../../icons/bird128.png'
     });
 }
 

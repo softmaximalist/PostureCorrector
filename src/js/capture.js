@@ -45,7 +45,6 @@ let sandboxSharedBufferReady = false;
 let firstStatsUpdate = true;
 let captureInterval;
 
-
 document.addEventListener('DOMContentLoaded', function() {
     DOMContentLoaded = true;
     
@@ -183,9 +182,19 @@ function stopCapture() {
 
 // Messages from sandbox.js
 window.addEventListener('message', (event) => {
+    if (event.data.type === 'sandboxListenerReady') {
+        sandboxElement.contentWindow.postMessage({ type: 'warningMethod', warningMethod: currentWarningMethod }, '*');
+        const urls = {
+          mediapipeVisionBundle: chrome.runtime.getURL('src/js/mediapipe/vision_bundle.mjs'),
+          mediapipeWasmDir: chrome.runtime.getURL('src/assets/mediapipe/'),
+          mediapipeModel: chrome.runtime.getURL('src/assets/mediapipe/face_landmarker.task'),
+          opencvJs: chrome.runtime.getURL('src/js/opencv/opencv.js'),
+          opencvWasm: chrome.runtime.getURL('src/js/opencv/opencv_js.wasm')
+        };
+        sandboxElement.contentWindow.postMessage({ type: 'initUrls', urls: urls }, '*');
+    }
     if (event.data.type === 'sandboxIsReady') { 
         sandboxIsReady = true;
-        sandboxElement.contentWindow.postMessage({ type: 'warningMethod', warningMethod: currentWarningMethod }, '*');
     } else if (event.data.type === 'sendNotification') {
         chrome.runtime.sendMessage({ type: 'sendNotification' });
     } else if (event.data.type === 'blurScreen') {
