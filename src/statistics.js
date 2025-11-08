@@ -1,11 +1,40 @@
 /*
 This file is used obtain user statistics stored in the local storage and plot them.
  */
+
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+ 
+// Register only the bits we need
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
+ 
 let stats;
 let dataArray;
 let cumulativeTimeWindowDuration;
 let activityData;
-
+let data;
 
 async function initializeData() {
     return new Promise((resolve) => {
@@ -42,10 +71,8 @@ async function initializeData() {
     });
 }
 
-
 async function waitForData() {
     await initializeData();
-
     createChart();
     createTimeWindowChart();
     createActivityChart();
@@ -53,7 +80,6 @@ async function waitForData() {
 }
 
 waitForData();
-
 
 function prepareDataForDisplay(data) {
     // Three statistics
@@ -99,7 +125,6 @@ function prepareDataForDisplay(data) {
         cumulativeEntertainmentDuration: data.cumulativeEntertainmentDuration
     };
 }
-
 
 // Function to create the line chart
 function createChart() {
@@ -285,7 +310,6 @@ function createActivityChart() {
         }
     });
 }
-
 
 function updateStats() {
     stats.forEach(stat => {
