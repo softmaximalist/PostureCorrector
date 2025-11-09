@@ -1,14 +1,12 @@
 const dropdown = document.getElementById('webcamDropdown');
 const saveGoodPostureButton = document.getElementById("goodPosture");
 const speedRadioButtons = document.querySelectorAll('input[name="frameProcessingSpeed"]');
-const warningRadioButtons = document.querySelectorAll('input[name="warningMethod"]');
 const activityRadioButtons = document.querySelectorAll('input[name="activity"]');
 const saveButtonMsgElement = document.getElementById('saveButtonMessage');
 let webcamRunning = false;
 let currentProcessingSpeed;
 let currentWarningMethod;
 let currentActivity;
-
 
 async function getAllWebcams() {
     const devices = await navigator.mediaDevices.enumerateDevices();
@@ -50,21 +48,6 @@ function handleWebcamSelection(event) {
 
 dropdown.addEventListener('change', handleWebcamSelection);
 
-// document.querySelectorAll('.toggle-switch input').forEach((checkbox) => {
-//     checkbox.addEventListener('change', function() {
-//         const toggleText = this.nextElementSibling.querySelector('.toggle-text');
-//         if (this.id === 'powerSwitch') {
-//             toggleText.textContent = this.checked ? 'ON' : 'OFF';
-//             webcamRunning = this.checked ? true : false;
-//             chrome.storage.local.set({ extensionIsOn: this.checked });
-//             chrome.runtime.sendMessage({ type: 'powerButton' });
-//             // if (webcamRunning) {
-//             //     window.close();
-//             // }
-//         }
-//     });
-// });
-
 document.getElementById('powerSwitch').addEventListener('change', function() {
     const isOn = this.checked;
     webcamRunning = isOn;
@@ -79,16 +62,6 @@ speedRadioButtons.forEach(radio => {
             chrome.storage.local.set({ processingSpeed: radio.value });
             currentProcessingSpeed = radio.value;
             chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: radio.value });
-        }
-    });
-});
-
-warningRadioButtons.forEach(radio => {
-    radio.addEventListener('change', () => {
-        if (radio.checked) {
-            chrome.storage.local.set({ warningMethod: radio.value });
-            currentWarningMethod = radio.value;
-            chrome.runtime.sendMessage({ type: 'warningMethod', warningMethod: radio.value });
         }
     });
 });
@@ -116,7 +89,7 @@ saveGoodPostureButton.addEventListener('click', () => {
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     } else {
         saveButtonMsgElement.textContent = "*Please turn on the extension and select your frame processing " + 
-        "speed, warning method, and activity first before you save your best posture.";
+        "speed and activity first before you save your best posture.";
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     }
 });
@@ -144,16 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 radio.checked = true;
                 currentProcessingSpeed = radio.value;
                 chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: radio.value });
-            }
-        });
-    });
-
-    chrome.storage.local.get(['warningMethod'], result => {
-        warningRadioButtons.forEach(radio => {
-            if (radio.value === result.warningMethod) {
-                radio.checked = true;
-                currentWarningMethod = radio.value;
-                chrome.runtime.sendMessage({ type: 'warningMethod', warningMethod: radio.value });
             }
         });
     });
