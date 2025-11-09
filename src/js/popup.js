@@ -5,7 +5,6 @@ const activityRadioButtons = document.querySelectorAll('input[name="activity"]')
 const saveButtonMsgElement = document.getElementById('saveButtonMessage');
 let webcamRunning = false;
 let currentProcessingSpeed;
-let currentWarningMethod;
 let currentActivity;
 
 async function getAllWebcams() {
@@ -77,7 +76,7 @@ activityRadioButtons.forEach(radio => {
 });
 
 saveGoodPostureButton.addEventListener('click', () => {
-    if (webcamRunning && currentProcessingSpeed && currentWarningMethod && currentActivity) {
+    if (webcamRunning && currentProcessingSpeed && currentActivity) {
         chrome.runtime.sendMessage({ type: 'saveGoodPosture' });
         if (currentProcessingSpeed === 'fast') {
             saveButtonMsgElement.textContent = '*Please maintain your best posture for 1 second to save it.';
