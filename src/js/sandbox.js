@@ -14,7 +14,6 @@ let countingBadPostureDuration = false;
 let badPostureDuration = 0.0;
 let startTime = 0.0;
 let results = undefined;
-let currentWarningMethod;
 let warnedUser = false;
 let width, height;
 let canvas, context;
@@ -93,6 +92,7 @@ function setupEventListener() {
             }, false);
 
         } else if (event.data.type === 'processFrame') {
+            console.log("processFrame message received");
             const imageData = new ImageData(
                 new Uint8ClampedArray(event.data.buffer),
                 width,
@@ -101,8 +101,6 @@ function setupEventListener() {
             // Put the image data directly onto the canvas
             context.putImageData(imageData, 0, 0);
             processFrame();
-        } else if (event.data.type === 'warningMethod') {
-            currentWarningMethod = event.data.warningMethod;
         }
     });
 
@@ -136,9 +134,6 @@ function processFrame() {
                         countingBadPostureDuration = false;
                         badPostureDuration = 0;
                         warnedUser = false;
-                        if (currentWarningMethod === 'blur') {
-                            window.parent.postMessage({ type: 'unblurScreen' }, '*');
-                        }
                     }
                 }
             }
@@ -147,7 +142,8 @@ function processFrame() {
         console.error("[sandbox.js] Error in processFrame(): ", error);
         handleProcessingError(error);
     }
-    
+    console.log("headPitchAngle: ", headPitchAngle);
+    console.log("headWebcamDistance: ", headWebcamDistance);
     window.parent.postMessage({ 
         type: 'result',
         pitch: adjustedHeadPitchAngle, 
@@ -155,7 +151,6 @@ function processFrame() {
         duration: badPostureDuration
     }, '*');
 }
-
 
 function handleProcessingError(error) {
     if (error.message.includes("WebGL context lost")) {
@@ -178,7 +173,6 @@ function attemptRecovery() {
         setTimeout(attemptRecovery, 5000);
     });
 }
-
 
 function getFacialFeatures(faceLandmarks, frameHeight, frameWidth) {
     const face2dCoordArray = [];
@@ -209,7 +203,6 @@ function getFacialFeatures(faceLandmarks, frameHeight, frameWidth) {
     return { face2dCoordMatrix: face2dCoordMatrix, nose2dCoord: nose2dCoord };
 }
  
-
 function calculateHeadAngles(face2dCoordMatrix, frameHeight, frameWidth) {
     const focalLength = frameWidth;
     /*
@@ -256,7 +249,6 @@ function calculateHeadAngles(face2dCoordMatrix, frameHeight, frameWidth) {
     return pitchAngle;
 }
 
-
 function matToArray(mat) {
     if (mat.rows !== 3 || mat.cols !== 3) {
         throw new Error('Matrix must be 3x3.');
@@ -269,7 +261,6 @@ function matToArray(mat) {
 
     return array;
 }
-
 
 function rotationMatrixToEulerAngles(R) {
     let sy = Math.sqrt(R[0][0] * R[0][0] + R[1][0] * R[1][0]);
@@ -289,14 +280,12 @@ function rotationMatrixToEulerAngles(R) {
     return pitchAngle; 
 }
 
-
 function estimateHeadPose(faceLandmarks, frameHeight, frameWidth) {
     const { face2dCoordMatrix, nose2d } = getFacialFeatures(faceLandmarks, frameHeight, frameWidth);
     const pitchAngle = calculateHeadAngles(face2dCoordMatrix, frameHeight, frameWidth);
   
     return pitchAngle
 }
-
 
 function estimateHeadWebcamDistance(faceLandmarks, frameHeight, frameWidth) {
     const leftEyePupil = 473  // Index for mediapipe landmark
@@ -316,7 +305,6 @@ function estimateHeadWebcamDistance(faceLandmarks, frameHeight, frameWidth) {
     return (focalLength / imageEyeDistance) * averagePupillaryDistance;
 }
   
-
 function sittingPostureIsBad(headPitchAngle, headDistance, goodHeadDistance) {
     if (headPitchAngle < -10 || (goodHeadDistance - headDistance) > 10) {
         return true;
@@ -324,12 +312,8 @@ function sittingPostureIsBad(headPitchAngle, headDistance, goodHeadDistance) {
     return false;
 }
 
-
 function warnUser(badPostureDuration) {
-    if (currentWarningMethod === 'notification' && 5 <= badPostureDuration && ((badPostureDuration - 5) % 20) === 0) {
-        window.parent.postMessage({ type: 'sendNotification' }, '*');
-    } else if (currentWarningMethod === 'blur' && 5 <= badPostureDuration && !warnedUser) {
-        window.parent.postMessage({ type: 'blurScreen' }, '*');
-        warnedUser = true;
+    if (5 <= badPostureDuration && ((badPostureDuration - 5) % 20) === 0) {
+        window.parent.postMessage({ type: 'warnUser' }, '*');
     }
 }
