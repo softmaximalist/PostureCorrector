@@ -28,8 +28,6 @@ const minutesUntilNextUpdate = 10;
 let timewindowTimeoutId;
 let longestGoodDurationStart;
 let currentProcessingSpeed;
-let currentWarningMethod;
-let firstWarningMethodNotSentToSandbox = false;
 let currentActivity;
 let cumulativeActivityBadPostDur = 0;
 let currentActivityTimestamp;
@@ -37,7 +35,7 @@ let startTimestamp;
 let data;
 let currentSelectedWebcam;
 let buffer, array;
-let DOMContentLoaded = false;
+let domContentLoaded = false;
 let sandboxLoaded = false;
 let goodPostureSaved = false;
 let width, height;
@@ -46,7 +44,7 @@ let firstStatsUpdate = true;
 let captureInterval;
 
 document.addEventListener('DOMContentLoaded', function() {
-    DOMContentLoaded = true;
+    domContentLoaded = true;
     
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (message.type === 'webcam' && message.selectedWebcam !== currentSelectedWebcam) {
@@ -64,17 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 goodPostureSaved = true;
             }
         } else if (message.type === 'processingSpeed' && message.processingSpeed !== currentProcessingSpeed) {
-            stopCapture();
             setProcessingSpeedAndStartWebcam(message.processingSpeed);
-        } else if (message.type === 'warningMethod' && message.warningMethod !== currentWarningMethod) {
-            setWarningMethod(message.warningMethod);
         } else if (message.type === 'activity' && message.activity !== currentActivity) {
             if (currentActivity === undefined) {
                 currentActivity = message.activity;
             } else {
                 updateActivityStatistics(message.activity);
             }
-        } else if (message.type === 'closeCaptureTab') {
+        } else if (message.type === 'prepareCaptureTabClosing') {
             webcamRunning = false;
             prepareForTabClosing();
             chrome.storage.local.set({ statistics: data });
@@ -83,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     chrome.runtime.sendMessage({ type: 'captureIsReady' });
 });
-
 
 function saveDataPeriodically() {
     const endTimestamp = Date.now();
@@ -97,7 +91,6 @@ function saveDataPeriodically() {
     setTimeout(saveDataPeriodically, delayTime);
 }
 
-
 function setSelectedWebcamAndStartWebcam(selectedWebcam) {
     currentSelectedWebcam = selectedWebcam;
 
@@ -105,7 +98,6 @@ function setSelectedWebcamAndStartWebcam(selectedWebcam) {
         startWebcam(currentSelectedWebcam, currentProcessingSpeed);
     }
 }
-
 
 function setProcessingSpeedAndStartWebcam(processingSpeed) {
     if (processingSpeed === 'fast') {
@@ -121,7 +113,6 @@ function setProcessingSpeedAndStartWebcam(processingSpeed) {
     }
 }
 
-
 function startWebcam(deviceId, processingSpeed) {
     stopCapture();
     const constraints = {
@@ -130,7 +121,6 @@ function startWebcam(deviceId, processingSpeed) {
         },
         audio: false
     };
-
     navigator.mediaDevices.getUserMedia(constraints)
         .then(stream => {
             videoElement.srcObject = stream;
@@ -155,7 +145,6 @@ function startWebcam(deviceId, processingSpeed) {
         });
 }
 
-
 function captureAndSendFrame() {
     if (sandboxIsReady && webcamRunning) {
         ctx.drawImage(videoElement, 0, 0, width, height);
@@ -166,41 +155,36 @@ function captureAndSendFrame() {
             type: 'processFrame',
             buffer: buffer
         }, '*', [buffer]);
-        
         buffer = new ArrayBuffer(width * height * 4);
     }
 }
-
 
 function stopCapture() {
     if (captureInterval) {
         clearInterval(captureInterval);
         captureInterval = null;
     }
+    if (videoElement.srcObject) {
+        videoElement.srcObject.getTracks().forEach(track => track.stop());
+        videoElement.srcObject = null;
+    }
 }
-
 
 // Messages from sandbox.js
 window.addEventListener('message', (event) => {
     if (event.data.type === 'sandboxListenerReady') {
-        sandboxElement.contentWindow.postMessage({ type: 'warningMethod', warningMethod: currentWarningMethod }, '*');
         const urls = {
-          mediapipeVisionBundle: chrome.runtime.getURL('src/js/mediapipe/vision_bundle.mjs'),
+          mediapipeVisionBundle: chrome.runtime.getURL('src/assets/mediapipe/vision_bundle.mjs'),
           mediapipeWasmDir: chrome.runtime.getURL('src/assets/mediapipe/'),
           mediapipeModel: chrome.runtime.getURL('src/assets/mediapipe/face_landmarker.task'),
-          opencvJs: chrome.runtime.getURL('src/js/opencv/opencv.js'),
-          opencvWasm: chrome.runtime.getURL('src/js/opencv/opencv_js.wasm')
+          opencvJs: chrome.runtime.getURL('src/assets/opencv/opencv.js'),
+          opencvWasm: chrome.runtime.getURL('src/assets/opencv/opencv_js.wasm')
         };
         sandboxElement.contentWindow.postMessage({ type: 'initUrls', urls: urls }, '*');
-    }
-    if (event.data.type === 'sandboxIsReady') { 
+    } else if (event.data.type === 'sandboxIsReady') { 
         sandboxIsReady = true;
-    } else if (event.data.type === 'sendNotification') {
-        chrome.runtime.sendMessage({ type: 'sendNotification' });
-    } else if (event.data.type === 'blurScreen') {
-        chrome.runtime.sendMessage({ type: 'blurScreen' });
-    } else if (event.data.type === 'unblurScreen') {
-        chrome.runtime.sendMessage({ type: 'unblurScreen' });
+    } else if (event.data.type === 'warnUser') {
+        chrome.runtime.sendMessage({ type: 'warnUser' });
     } else if (event.data.type === 'result') {
         updateBadPostureDuration(event.data.duration);
         if (event.data.pitch !== null) {
@@ -218,7 +202,6 @@ window.addEventListener('message', (event) => {
         chrome.runtime.sendMessage({ type: 'webglContextRestored' });
     }
 });
-
 
 async function initializeData() {
     return new Promise((resolve) => {
@@ -254,13 +237,11 @@ async function initializeData() {
     });
 }
 
-
 async function waitForData() {
     await initializeData();
 }
 
 waitForData();
-
 
 function updateDailyStatistics() {
     const currentDateStr = new Date().toDateString();
@@ -295,7 +276,6 @@ function updateDailyStatistics() {
         data.dailyDuration = 0;
     }
 }
-
 
 function updateBadPostureDuration(badPostureDuration) {
     if (firstStatsUpdate === true) {
@@ -332,7 +312,6 @@ function updateBadPostureDuration(badPostureDuration) {
         }
     }
 }
-
 
 function updateTimewindowStatistics() {
     const currentDate = new Date();
@@ -372,7 +351,6 @@ function updateTimewindowStatistics() {
     }
 }
 
-
 function updateActivityStatistics(newActivity) {
     const nextTimestamp = Date.now();
     const currentActivityDuration = Math.floor((nextTimestamp - currentActivityTimestamp) / 1000);
@@ -398,19 +376,6 @@ function updateActivityStatistics(newActivity) {
     currentActivity = newActivity;
 }
 
-
-function setWarningMethod(warningMethod) {
-    if (sandboxIsReady) {
-        sandboxElement.contentWindow.postMessage({ 
-            type: 'warningMethod', warningMethod: warningMethod
-        }, '*');
-    } else {
-        firstWarningMethodNotSentToSandbox = true;
-    }
-    currentWarningMethod = warningMethod;
-}
-
-
 function prepareForTabClosing() {
     stopCapture();
     webcamRunning = false;
@@ -420,4 +385,9 @@ function prepareForTabClosing() {
 
     updateTimewindowStatistics();
     updateActivityStatistics(currentActivity);
+    
+    // Clear all setTimeout/setInterval
+    clearTimeout(updateTimewindowStatistics);
+    clearTimeout(updateDailyStatistics);
+    clearInterval(captureAndSendFrame);
 }

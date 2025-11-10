@@ -88,7 +88,7 @@ saveGoodPostureButton.addEventListener('click', () => {
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     } else {
         saveButtonMsgElement.textContent = "*Please turn on the extension and select your frame processing " + 
-        "speed and activity first before you save your best posture.";
+        "speed and activity before you save your best posture.";
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     }
 });

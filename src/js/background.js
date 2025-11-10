@@ -6,7 +6,6 @@ after receiving messages from capture.js to warn the user about their bad postur
 */
 let captureIsReady, captureTabId, currentSelectedWebcam, currentProcessingSpeed, currentActivity, 
     firstWebcamNotSentToCapture, firstProcessingSpeedNotSentToCapture, firstActivityNotSentToCapture;
-const readyTabs = new Set();
 
 function initializeGlobalVariables() {
     const variablesToInit = {
@@ -60,16 +59,16 @@ function initializeGlobalVariables() {
 initializeGlobalVariables();
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'webcamSelected' && message.selectedWebcam !== currentSelectedWebcam) {
-        sendWebcamInfoToCapture(message.selectedWebcam);
-    } else if (message.type === 'powerButton') {
+    if (message.type === 'powerButton') {
         if (message.powerState === false) {
-            chrome.runtime.sendMessage({ type: 'closeCaptureTab' });
+            chrome.runtime.sendMessage({ type: 'prepareCaptureTabClosing' });
         } else {
             openCaptureTab();
         }
-    } else if (message.type === 'sendNotification') {
+    } else if (message.type === 'warnUser') {
         sendWarningNotification();
+    } else if (message.type === 'webcamSelected' && message.selectedWebcam !== currentSelectedWebcam) {
+        sendWebcamInfoToCapture(message.selectedWebcam); 
     } else if (message.type === 'processingSpeed' && message.processingSpeed !== currentProcessingSpeed) {
         sendSpeedInfoToCapture(message.processingSpeed);
     } else if (message.type === 'activity' && message.activity !== currentActivity) {
@@ -134,9 +133,6 @@ function setCaptureToReady() {
 
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
     if (tabId === captureTabId) {
-        if (isBlurred) {
-            setBlurState(false);
-        }
         resetVariables();
         chrome.storage.local.set({ extensionIsOn: false });
     }

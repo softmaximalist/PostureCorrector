@@ -21,13 +21,22 @@ let cv;
 let urls = {};
 let isFullyInitialized = false;
 
-function loadScript(url) {
+function loadScript(url, timeout = 30000) {
     return new Promise((resolve, reject) => {
+        const timeoutId = setTimeout(() => {
+            reject(new Error(`Script load timeout: ${url}`));
+        }, timeout);
+        
         const script = document.createElement('script');
         script.src = url;
-        script.async = true; // Ensure script is loaded asynchronously
-        script.onload = resolve;
-        script.onerror = () => reject(new Error(`Failed to load script: ${url}`));
+        script.onload = () => {
+            clearTimeout(timeoutId);
+            resolve();
+        };
+        script.onerror = () => {
+            clearTimeout(timeoutId);
+            reject(new Error(`Failed to load: ${url}`));
+        };
         document.head.appendChild(script);
     });
 }
@@ -56,17 +65,38 @@ function setupEventListener() {
         if (event.data.type === 'initUrls') {
             try {
                 urls = event.data.urls;
-                await loadScript(urls.opencvJs);
-                // Now 'cv' is available on the global scope (window)
-                cv = await new Promise((resolve) => {
-                    window.cv['onRuntimeInitialized'] = () => {
-                        resolve(window.cv);
-                    };
+                        
+                // Create promise for when OpenCV is ready
+                let resolveOpenCV;
+                const opencvReady = new Promise(resolve => {
+                    resolveOpenCV = resolve;
                 });
+                
+                // Configure Module
+                window.Module = {
+                    locateFile: function(path, prefix) {
+                        if (path.endsWith('.wasm')) {
+                            console.log("Loading WASM from:", urls.opencvWasm);
+                            return urls.opencvWasm;
+                        }
+                        return prefix + path;
+                    },
+                    onRuntimeInitialized: function() {
+                        // In onRuntimeInitialized, 'this' is the Module/cv object
+                        // Assign it to window.cv
+                        window.cv = this;
+                        resolveOpenCV();
+                    }
+                };
+                
+                await loadScript(urls.opencvJs);
+                await opencvReady;
+                cv = window.cv;
                 await createFaceLandmarker();
                 window.parent.postMessage({ type: 'sandboxIsReady' }, '*');
             } catch (error) {
                 console.error("Failed to load or initialize scripts:", error);
+                console.error("Error stack:", error.stack);
             }
         } else if (event.data.type === 'saveGoodPosture') {
             goodHeadWebcamDistance = headWebcamDistance;
@@ -92,7 +122,6 @@ function setupEventListener() {
             }, false);
 
         } else if (event.data.type === 'processFrame') {
-            console.log("processFrame message received");
             const imageData = new ImageData(
                 new Uint8ClampedArray(event.data.buffer),
                 width,
@@ -104,7 +133,6 @@ function setupEventListener() {
         }
     });
 
-    // window.parent.postMessage({ type: 'sandboxIsReady'}, '*');
     window.parent.postMessage({ type: 'sandboxListenerReady' }, '*');
 }
 
@@ -142,8 +170,7 @@ function processFrame() {
         console.error("[sandbox.js] Error in processFrame(): ", error);
         handleProcessingError(error);
     }
-    console.log("headPitchAngle: ", headPitchAngle);
-    console.log("headWebcamDistance: ", headWebcamDistance);
+    
     window.parent.postMessage({ 
         type: 'result',
         pitch: adjustedHeadPitchAngle, 
