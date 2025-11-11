@@ -42,6 +42,8 @@ let width, height;
 let sandboxSharedBufferReady = false;
 let firstStatsUpdate = true;
 let captureInterval;
+const DEFAULT_PITCH_THRESHOLD = -10;
+const DEFAULT_DISTANCE_THRESHOLD = 10;
 
 document.addEventListener('DOMContentLoaded', function() {
     domContentLoaded = true;
@@ -52,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
             currentProcessingSpeed = computeProcessingSpeedInMilliseconds(result.processingSpeed);
         }
     });
+    
+    // Send initial threshold values
+    loadOrSetThresholdValuesAndSend();
     
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (message.type === 'webcam' && message.selectedWebcam !== currentSelectedWebcam) {
@@ -81,6 +86,13 @@ document.addEventListener('DOMContentLoaded', function() {
             prepareForTabClosing();
             chrome.storage.local.set({ statistics: data });
             chrome.runtime.sendMessage({ type: 'captureIsReadyToClose' });
+        } else if (message.type === 'pitchAngleThreshold') {
+            setAndSendPitchAngleThreshold(message.value);
+        } else if (message.type === 'distanceThreshold') {
+            setAndSendDistanceThreshold(message.value);
+        } else if (message.type === 'thresholdsReset') {
+            setAndSendPitchAngleThreshold(DEFAULT_PITCH_THRESHOLD);
+            setAndSendDistanceThreshold(DEFAULT_DISTANCE_THRESHOLD);
         }
     });
     chrome.runtime.sendMessage({ type: 'captureIsReady' });
@@ -95,6 +107,34 @@ function computeProcessingSpeedInMilliseconds(processingSpeed) {
         return 5000;
     }
     return null;
+}
+
+function setAndSendPitchAngleThreshold(thresholdValue) {
+    headPitchAngleThreshold = thresholdValue;
+    sandboxElement.contentWindow.postMessage({ type: 'pitchAngleThreshold', value: headPitchAngleThreshold}, '*');
+}
+
+function setAndSendDistanceThreshold(thresholdValue) {
+    headWebcamDistanceThreshold = thresholdValue;
+    sandboxElement.contentWindow.postMessage({ type: 'distanceThreshold', value: headWebcamDistanceThreshold}, '*');
+}
+
+function loadOrSetThresholdValuesAndSend() {
+    chrome.storage.local.get(['pitchAngleThreshold'], result => {
+        if (result.pitchAngleThresold) {
+            setAndSendPitchAngleThreshold(parseInt(result.pitchAngleThresold));
+        } else {
+            setAndSendDistanceThreshold(DEFAULT_PITCH_THRESHOLD)
+        }
+    });
+    
+    chrome.storage.local.get(['distanceThreshold'], result => {
+        if (result.distanceThreshold) {
+            setAndSendDistanceThreshold(parseInt(result.distanceThreshold));
+        } else {
+            setAndSendDistanceThreshold(DEFAULT_DISTANCE_THRESHOLD);
+        }
+    });
 }
 
 function saveDataPeriodically() {
@@ -118,7 +158,7 @@ function setSelectedWebcamAndStartWebcam(selectedWebcam) {
 }
 
 function setProcessingSpeedAndStartWebcam(processingSpeed) {
-    currentProcessingSpeed = computeProcessingSpeedInMilliseconds(result.processingSpeed);
+    currentProcessingSpeed = computeProcessingSpeedInMilliseconds(processingSpeed);
 
     if (currentSelectedWebcam && currentProcessingSpeed) {
         startWebcam(currentSelectedWebcam, currentProcessingSpeed);
