@@ -6,6 +6,7 @@ after receiving messages from capture.js to warn the user about their bad postur
 */
 let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity, 
     firstWebcamNotSentToCapture, firstActivityNotSentToCapture;
+let iconPath = chrome.runtime.getURL("src/assets/icons/bird128.png");
 
 function initializeGlobalVariables() {
     const variablesToInit = {
@@ -167,7 +168,7 @@ function sendWarningNotification() {
         title: 'Bad Posture Warning',
         message: 'Bad posture has been detected for more than 5 seconds. Please correct your posture.',
         priority: 2,
-        iconUrl: '../../icons/bird128.png'
+        iconUrl: iconPath
     });
 }
 
@@ -178,7 +179,7 @@ function sendErrorOccuredNotification() {
         message: "An error has occured while processing the video frames. \
          Please wait for the extension to fix the problem or restart the PostureCorrector extension.",
         priority: 2,
-        iconUrl: '../../icons/bird128.png'
+        iconUrl: iconPath
     });
 }
 
@@ -188,6 +189,6 @@ function sendErrorResolvedNotification() {
         title: 'PostureCorrector: Error resolved',
         message: "PostureCorrector has resolved the error that occured earlier. You can continue using the extensin as usual.",
         priority: 2,
-        iconUrl: '../../icons/bird128.png'
+        iconUrl: iconPath
     });
 }
