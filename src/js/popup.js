@@ -3,7 +3,7 @@ const saveGoodPostureButton = document.getElementById("goodPosture");
 const activityRadioButtons = document.querySelectorAll('input[name="activity"]');
 const saveButtonMsgElement = document.getElementById('saveButtonMessage');
 let webcamRunning = false;
-let currentProcessingSpeed;
+let currentProcessingSpeed = "fast";
 let currentActivity;
 
 async function getAllWebcams() {
@@ -33,7 +33,6 @@ async function createWebcamDropdown() {
             }
             handleWebcamSelection({ target: dropdown });
         });
-
     }
 }
 
@@ -76,8 +75,7 @@ saveGoodPostureButton.addEventListener('click', () => {
         }
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     } else {
-        saveButtonMsgElement.textContent = "*Please turn on the extension and select your frame processing " + 
-        "speed and activity before you save your best posture.";
+        saveButtonMsgElement.textContent = "*Please turn on the extension and select your activity before you save your best posture.";
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     }
 });
@@ -96,6 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('powerText').textContent = 'OFF';
                 webcamRunning = false;
             }
+        }
+    });
+    
+    // Load saved processing speed
+    chrome.storage.local.get(['processingSpeed'], result => {
+        if (result.processingSpeed) {
+            currentProcessingSpeed = result.processingSpeed;
         }
     });
 
