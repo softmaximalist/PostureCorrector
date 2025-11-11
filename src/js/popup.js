@@ -1,6 +1,5 @@
 const dropdown = document.getElementById('webcamDropdown');
 const saveGoodPostureButton = document.getElementById("goodPosture");
-const speedRadioButtons = document.querySelectorAll('input[name="frameProcessingSpeed"]');
 const activityRadioButtons = document.querySelectorAll('input[name="activity"]');
 const saveButtonMsgElement = document.getElementById('saveButtonMessage');
 let webcamRunning = false;
@@ -55,16 +54,6 @@ document.getElementById('powerSwitch').addEventListener('change', function() {
     chrome.runtime.sendMessage({ type: 'powerButton', powerState: isOn });
 });
 
-speedRadioButtons.forEach(radio => {
-    radio.addEventListener('change', () => {
-        if (radio.checked) {
-            chrome.storage.local.set({ processingSpeed: radio.value });
-            currentProcessingSpeed = radio.value;
-            chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: radio.value });
-        }
-    });
-});
-
 activityRadioButtons.forEach(radio => {
     radio.addEventListener('change', () => {
         if (radio.checked) {
@@ -108,16 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 webcamRunning = false;
             }
         }
-    });
-
-    chrome.storage.local.get(['processingSpeed'], result => {
-        speedRadioButtons.forEach(radio => {
-            if (radio.value === result.processingSpeed) {
-                radio.checked = true;
-                currentProcessingSpeed = radio.value;
-                chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: radio.value });
-            }
-        });
     });
 
     chrome.storage.local.get(['activity'], result => {

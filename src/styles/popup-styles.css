@@ -24,6 +24,7 @@ body {
     border-bottom: 1px solid #cccccc; /* Optional: adds a subtle separator */
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .title-icon {
@@ -32,18 +33,111 @@ body {
     margin-right: 10px;
 }
 
-.container {
-    width: 320px; /* Set the maximum width you want */
-    padding: 30px 30px 0 30px;
-    margin-top: 30px;
-    box-sizing: border-box;
+/* Icon Navigation Container */
+.icon-nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /*gap: 3px;*/
+    padding: 75px 30px 5px 25px;
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+/* Individual Icon Link */
+.icon-nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 45px;
+    /*background: linear-gradient(135deg, #fd4646 0%, #ff6b6b 100%);*/
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+    transition: all 0.3s ease;
+    /*box-shadow: 0 3px 10px rgba(253, 70, 70, 0.3);*/
+}
+
+.nav-icon-img {
+    width: 30px; /* Larger icon size */
+    height: 30px;
+}
+
+.icon-nav-link:hover {
+    transform: translateY(-5px);
+    /*box-shadow: 0 6px 20px rgba(253, 70, 70, 0.4);*/
+    /*background: linear-gradient(135deg, #ff5252 0%, #ff7979 100%);*/
+}
+
+.icon-nav-link:active {
+    transform: translateY(-2px);
+    /*box-shadow: 0 4px 15px rgba(253, 70, 70, 0.35);*/
+}
+
+/* Tooltip on Hover */
+.icon-tooltip {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, bottom 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 100;
+}
+
+/* Tooltip arrow */
+.icon-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #333;
+}
+
+.icon-nav-link:hover .icon-tooltip {
+    opacity: 1;
+    bottom: -45px;
+}
+
+.nav-icon {
+    width: 30px;
+    height: 30px;
 }
 
 .divider {
     border: none;
     height: 1px;
     background-color: #cccccc; /* Light gray color */
-    margin: 3px; /* Adjust top and bottom margin as needed */
+    margin: 5px 0; /* Adjust top and bottom margin as needed */
+    width: 100%; /* Fixed width, adjust as needed */
+}
+
+/* Override for dividers that need to extend beyond toggle-container padding */
+.toggle-container .divider {
+    width: calc(100% + 20px); /* Extends 10px on each side to match .container width */
+    margin-left: -10px; /* Shifts it left */
+}
+
+.container {
+    width: 320px; /* Set the maximum width you want */
+    padding: 0 30px 0 30px;
+    box-sizing: border-box;
 }
 
 select {
@@ -56,7 +150,7 @@ select {
 /* Container for the switches */
 .toggle-container {
     font-family: Helvetica, sans-serif;
-    padding: 10px 10px 0 10px;
+    padding: 0 10px 0 10px;
 }
 
 /* Container for each toggle item */
@@ -64,14 +158,14 @@ select {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 13px;
+    margin-bottom: 13px;
 }
 
 .toggle-description-wrapper {
     flex-grow: 1;
     margin-right: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 /* Description text for each toggle */
@@ -127,7 +221,7 @@ select {
     position: relative;
     display: inline-block;
     width: 80px;
-    height: 34px;
+    height: 30px;
 }
 
 .toggle-switch input {
@@ -150,8 +244,8 @@ select {
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 22px;
+    width: 22px;
     left: 4px;
     bottom: 4px;
     background-color: white;
@@ -167,7 +261,7 @@ input:checked + .slider:before {
 }
 
 .slider.round {
-    border-radius: 34px;
+    border-radius: 30px;
 }
 
 .slider.round:before {
@@ -202,14 +296,14 @@ Radio Buttons
 .radio-container {
     font-family: Arial, sans-serif;
     max-width: 300px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 13px;
+    margin-bottom: 13px;
 }
 
 .radio-section-title {
     font-size: 18px;
     margin-top: 0;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-weight: bold;
 }
 
@@ -235,7 +329,7 @@ Radio Buttons
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 12px 16px;
+    padding: 8px 14px;
     cursor: pointer;
 }
 
@@ -243,19 +337,6 @@ Radio Buttons
     display: flex;
     flex-direction: column;
 }
-
-.radio-text-primary {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
-.radio-text-secondary {
-    font-size: 14px;
-    color: #666;
-    margin-top: 4px;
-}
-
 
 .radio-item .icon {
     font-size: 20px;
@@ -276,7 +357,6 @@ Radio Buttons
     border-color: #1A73E8;
     border-width: 3px;
 }
-
 
 /*
 Save Good Posture Button
