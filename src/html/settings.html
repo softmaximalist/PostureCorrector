@@ -31,13 +31,13 @@
     <main>
         <!-- Frame Processing Speed Section -->
         <div class="section">
-            <h2 class="section-title">Frame Processing Speed</h2>
+            <h2 class="section-title">Posture Detection Frequency</h2>
             <div class="radio-container">
                 <div class="radio-item">
                     <input type="radio" id="fast" name="frameProcessingSpeed" value="fast">
                     <label for="fast">
                         <div class="radio-content">
-                            <div class="radio-text-primary">⚡ Fast: 1 second per frame</div>
+                            <div class="radio-text-primary">⚡ Fast: 1 frame per second</div>
                             <div class="radio-text-secondary">
                                 [Recommended] This option provides the fastest frame processing 
                                 speed, allowing for highly accurate and responsive posture detection. However, it 
@@ -51,7 +51,7 @@
                     <input type="radio" id="medium" name="frameProcessingSpeed" value="medium">
                     <label for="medium">
                         <div class="radio-content">
-                            <div class="radio-text-primary">⚙️ Medium: 2.5 seconds per frame</div>
+                            <div class="radio-text-primary">🚙 Medium: 1 frame per 2.5 seconds</div>
                             <div class="radio-text-secondary">
                                 Choose this option if the fastest option above affects your 
                                 system performance. It offers a good balance between responsiveness and reduced 
@@ -65,7 +65,7 @@
                     <input type="radio" id="slow" name="frameProcessingSpeed" value="slow">
                     <label for="slow">
                         <div class="radio-content">
-                            <div class="radio-text-primary">🐢 Slow: 5 seconds per frame</div>
+                            <div class="radio-text-primary">🐢 Slow: 1 frame per 5 seconds</div>
                             <div class="radio-text-secondary">
                                 Select this option if both faster options above affect your 
                                 system performance. It's the least demanding on your computer, ideal for older or 
@@ -78,12 +78,45 @@
         </div>
 
         <!-- Advanced Configuration Section -->
-        <div class="section">
+        <section class="section">
             <h2 class="section-title">Advanced Configuration</h2>
             <div class="advanced-section">
-                Advanced settings will be configured here
+                <div class="advanced-content">
+                    <p class="advanced-description">
+                        Fine-tune posture detection sensitivity by adjusting the threshold values below. 
+                        Lower negative values increase sensitivity for forward head detection, while higher positive values adjust slouching detection.
+                    </p>
+                    
+                    <div class="slider-group">
+                        <div class="slider-item">
+                            <div class="slider-header">
+                                <label class="slider-label">Forward Head Threshold</label>
+                                <span class="slider-value" id="pitchAngleThresholdValue">-10</span>
+                            </div>
+                            <input type="range" id="pitchAngleThreshold" class="slider" min="-15" max="-5" value="-10" step="1">
+                            <div class="slider-range">
+                                <span>-15</span>
+                                <span>-5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="slider-item">
+                            <div class="slider-header">
+                                <label class="slider-label">Slouching Threshold</label>
+                                <span class="slider-value" id="distanceThresholdValue">10</span>
+                            </div>
+                            <input type="range" id="distanceThreshold" class="slider" min="5" max="15" value="10" step="1">
+                            <div class="slider-range">
+                                <span>5</span>
+                                <span>15</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="reset-button" id="resetButton">Reset to Default</button>
+                </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <script src="../js/settings.js"></script>
