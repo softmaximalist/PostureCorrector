@@ -27,7 +27,7 @@ let cumulativeTimeWindowBadPosDur = 0;
 const minutesUntilNextUpdate = 10;
 let timewindowTimeoutId;
 let longestGoodDurationStart;
-let currentProcessingSpeed;
+let currentProcessingSpeed = 1000;
 let currentActivity;
 let cumulativeActivityBadPostDur = 0;
 let currentActivityTimestamp;
@@ -45,6 +45,13 @@ let captureInterval;
 
 document.addEventListener('DOMContentLoaded', function() {
     domContentLoaded = true;
+    
+    // Load processing speed if there is saved data
+    chrome.storage.local.get(['processingSpeed'], result => {
+        if (result.processingSpeed) {
+            currentProcessingSpeed = computeProcessingSpeedInMilliseconds(result.processingSpeed);
+        }
+    });
     
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (message.type === 'webcam' && message.selectedWebcam !== currentSelectedWebcam) {
@@ -79,6 +86,17 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.runtime.sendMessage({ type: 'captureIsReady' });
 });
 
+function computeProcessingSpeedInMilliseconds(processingSpeed) {
+    if (processingSpeed === "fast") {
+        return 1000;
+    } else if (processingSpeed === "medium") {
+        return 2500;
+    } else if (processingSpeed === "slow") {
+        return 5000;
+    }
+    return null;
+}
+
 function saveDataPeriodically() {
     const endTimestamp = Date.now();
     data.dailyDuration += Math.floor((endTimestamp - startTimestamp) / 1000);
@@ -100,13 +118,7 @@ function setSelectedWebcamAndStartWebcam(selectedWebcam) {
 }
 
 function setProcessingSpeedAndStartWebcam(processingSpeed) {
-    if (processingSpeed === 'fast') {
-        currentProcessingSpeed = 1000;
-    } else if (processingSpeed === 'medium') {
-        currentProcessingSpeed = 2500;
-    } else if (processingSpeed === 'slow') {
-        currentProcessingSpeed = 5000;
-    }
+    currentProcessingSpeed = computeProcessingSpeedInMilliseconds(result.processingSpeed);
 
     if (currentSelectedWebcam && currentProcessingSpeed) {
         startWebcam(currentSelectedWebcam, currentProcessingSpeed);
@@ -190,7 +202,9 @@ window.addEventListener('message', (event) => {
         if (event.data.pitch !== null) {
             pitchElement.textContent = `${event.data.pitch} degrees`;
         }
-        distanceElement.textContent = `${event.data.distance} cm`;
+        if (event.data.distance !== null) {
+            distanceElement.textContent = `${event.data.distance} cm`;
+        }
         timeElement.textContent = `${event.data.duration} seconds`;
     } else if (event.data.type === 'webglContextLost') {
         webglErrorElement.textContent = "An error occured while processing the video frames. " + 

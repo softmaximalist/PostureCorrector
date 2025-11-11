@@ -4,18 +4,16 @@ It also forwards messages from popup.js to capture.js such as the webcam selecte
 and the warning method selected. Lastly, this file sends a desktop notification or blur and unblur browser tabs
 after receiving messages from capture.js to warn the user about their bad posture.
 */
-let captureIsReady, captureTabId, currentSelectedWebcam, currentProcessingSpeed, currentActivity, 
-    firstWebcamNotSentToCapture, firstProcessingSpeedNotSentToCapture, firstActivityNotSentToCapture;
+let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity, 
+    firstWebcamNotSentToCapture, firstActivityNotSentToCapture;
 
 function initializeGlobalVariables() {
     const variablesToInit = {
         captureIsReady: false,
         captureTabId: null,
         currentSelectedWebcam: undefined,
-        currentProcessingSpeed: undefined,
         currentActivity: undefined,
         firstWebcamNotSentToCapture: undefined,
-        firstProcessingSpeedNotSentToCapture: undefined,
         firstActivityNotSentToCapture: undefined
     };
 
@@ -23,17 +21,11 @@ function initializeGlobalVariables() {
         captureIsReady = result.hasOwnProperty('captureIsReady') ? result.captureIsReady : variablesToInit.captureIsReady;
         captureTabId = result.hasOwnProperty('captureTabId') ? result.captureTabId : variablesToInit.captureTabId;
         currentSelectedWebcam = result.hasOwnProperty('currentSelectedWebcam') ? result.currentSelectedWebcam : variablesToInit.currentSelectedWebcam;
-        currentProcessingSpeed = result.hasOwnProperty('currentProcessingSpeed') ? result.currentProcessingSpeed : variablesToInit.currentProcessingSpeed;
         currentActivity = result.hasOwnProperty('currentActivity') ? result.currentActivity : variablesToInit.currentActivity;
         if (result.hasOwnProperty('firstWebcamNotSentToCapture')) {
             firstWebcamNotSentToCapture = result.firstWebcamNotSentToCapture;
         } else {
             firstWebcamNotSentToCapture = variablesToInit.firstWebcamNotSentToCapture;
-        }
-        if (result.hasOwnProperty('firstProcessingSpeedNotSentToCapture')) {
-            firstProcessingSpeedNotSentToCapture = result.firstProcessingSpeedNotSentToCapture;
-        } else {
-            firstProcessingSpeedNotSentToCapture = variablesToInit.firstProcessingSpeedNotSentToCapture;
         }
         if (result.hasOwnProperty('firstActivityNotSentToCapture')) {
             firstActivityNotSentToCapture = result.firstActivityNotSentToCapture;
@@ -69,8 +61,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendWarningNotification();
     } else if (message.type === 'webcamSelected' && message.selectedWebcam !== currentSelectedWebcam) {
         sendWebcamInfoToCapture(message.selectedWebcam); 
-    } else if (message.type === 'processingSpeed' && message.processingSpeed !== currentProcessingSpeed) {
-        sendSpeedInfoToCapture(message.processingSpeed);
     } else if (message.type === 'activity' && message.activity !== currentActivity) {
         sendActivityInfoToCapture(message.activity);
     } else if (message.type === 'captureIsReady') {
@@ -95,17 +85,6 @@ function sendWebcamInfoToCapture(webcamId) {
     }
 }
 
-function sendSpeedInfoToCapture(processingSpeed) {
-    currentProcessingSpeed = processingSpeed;
-    chrome.storage.local.set({ currentProcessingSpeed: currentProcessingSpeed });
-    if (captureIsReady) {
-        chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: currentProcessingSpeed });
-    } else {
-        firstProcessingSpeedNotSentToCapture = true;
-        chrome.storage.local.set({ firstProcessingSpeedNotSentToCapture: firstProcessingSpeedNotSentToCapture });
-    }
-}
-
 function sendActivityInfoToCapture(activity) {
     currentActivity = activity;
     chrome.storage.local.set({ currentActivity: currentActivity });
@@ -122,9 +101,6 @@ function setCaptureToReady() {
     chrome.storage.local.set({ captureIsReady: captureIsReady });
     if (firstWebcamNotSentToCapture === true) {
         chrome.runtime.sendMessage({ type: 'webcam', selectedWebcam: currentSelectedWebcam });  
-    }
-    if (firstProcessingSpeedNotSentToCapture === true) {
-        chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: currentProcessingSpeed });
     }
     if (firstActivityNotSentToCapture === true) {
         chrome.runtime.sendMessage({ type: 'activity', activity: currentActivity });
@@ -165,10 +141,8 @@ function resetVariables() {
         'captureIsReady',
         'captureTabId',
         'currentSelectedWebcam',
-        'currentProcessingSpeed',
         'currentActivity',
         'firstWebcamNotSentToCapture',
-        'firstProcessingSpeedNotSentToCapture',
         'firstActivityNotSentToCapture'
     ];
 
@@ -180,10 +154,8 @@ function resetVariables() {
             captureIsReady = false;
             captureTabId = null;
             currentSelectedWebcam = null;
-            currentProcessingSpeed = null;
             currentActivity = null;
             firstWebcamNotSentToCapture = null;
-            firstProcessingSpeedNotSentToCapture = null;
             firstActivityNotSentToCapture = null;
         }
     });
