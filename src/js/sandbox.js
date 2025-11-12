@@ -10,6 +10,8 @@ let headPitchAngle = null;
 let adjustedHeadPitchAngle = null;
 let goodHeadWebcamDistance = null;
 let headWebcamDistance = null;
+let headPitchAngleThreshold = -10;
+let headWebcamDistanceThreshold = 10;
 let countingBadPostureDuration = false;
 let badPostureDuration = 0.0;
 let startTime = 0.0;
@@ -130,6 +132,10 @@ function setupEventListener() {
             // Put the image data directly onto the canvas
             context.putImageData(imageData, 0, 0);
             processFrame();
+        } else if (event.data.type === 'pitchAngleThreshold') {
+            headPitchAngleThreshold = event.data.value;
+        } else if (event.data.type === 'distanceThreshold') {
+            headWebcamDistanceThreshold = event.data.value;
         }
     });
 
@@ -333,7 +339,7 @@ function estimateHeadWebcamDistance(faceLandmarks, frameHeight, frameWidth) {
 }
   
 function sittingPostureIsBad(headPitchAngle, headDistance, goodHeadDistance) {
-    if (headPitchAngle < -10 || (goodHeadDistance - headDistance) > 10) {
+    if (headPitchAngle < headPitchAngleThreshold || (goodHeadDistance - headDistance) > headWebcamDistanceThreshold) {
         return true;
     }
     return false;

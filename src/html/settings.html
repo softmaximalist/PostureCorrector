@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostureCorrector - Settings</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/bird16.png">
+    <link rel="stylesheet" href="../styles/settings-styles.css">
+</head>
+<body>
+    <header>
+        <h1 class="title"><img src="../assets/icons/bird128.png" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
+        <nav class="top-nav">
+            <a href="statistics.html" class="nav-link">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3v18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18 17l-5-5-3 3-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>User Statistics</span>
+            </a>
+            <span class="nav-separator">|</span>
+            <a href="settings.html" class="nav-link active">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                    <path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Frame Processing Speed Section -->
+        <div class="section">
+            <h2 class="section-title">Posture Detection Frequency</h2>
+            <div class="radio-container">
+                <div class="radio-item">
+                    <input type="radio" id="fast" name="frameProcessingSpeed" value="fast">
+                    <label for="fast">
+                        <div class="radio-content">
+                            <div class="radio-text-primary">⚡ Fast: 1 frame per second</div>
+                            <div class="radio-text-secondary">
+                                [Recommended] This option provides the fastest frame processing 
+                                speed, allowing for highly accurate and responsive posture detection. However, it 
+                                is more computationally demanding and may affect system performance on older or slower systems.
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="radio-item">
+                    <input type="radio" id="medium" name="frameProcessingSpeed" value="medium">
+                    <label for="medium">
+                        <div class="radio-content">
+                            <div class="radio-text-primary">🚙 Medium: 1 frame per 2.5 seconds</div>
+                            <div class="radio-text-secondary">
+                                Choose this option if the fastest option above affects your 
+                                system performance. It offers a good balance between responsiveness and reduced 
+                                computational demand, suitable for most computers.
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="radio-item">
+                    <input type="radio" id="slow" name="frameProcessingSpeed" value="slow">
+                    <label for="slow">
+                        <div class="radio-content">
+                            <div class="radio-text-primary">🐢 Slow: 1 frame per 5 seconds</div>
+                            <div class="radio-text-secondary">
+                                Select this option if both faster options above affect your 
+                                system performance. It's the least demanding on your computer, ideal for older or 
+                                slower systems, but posture detection will be performed less frequently.
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Configuration Section -->
+        <section class="section">
+            <h2 class="section-title">Advanced Configuration</h2>
+            <div class="advanced-section">
+                <div class="advanced-content">
+                    <p class="advanced-description">
+                        Fine-tune posture detection sensitivity by adjusting the threshold values below. 
+                        Lower negative values increase sensitivity for forward head detection, while higher positive values adjust slouching detection.
+                    </p>
+                    
+                    <div class="slider-group">
+                        <div class="slider-item">
+                            <div class="slider-header">
+                                <label class="slider-label">Forward Head Threshold</label>
+                                <span class="slider-value" id="pitchAngleThresholdValue">-10</span>
+                            </div>
+                            <input type="range" id="pitchAngleThreshold" class="slider" min="-15" max="-5" value="-10" step="1">
+                            <div class="slider-range">
+                                <span>-15</span>
+                                <span>-5</span>
+                            </div>
+                        </div>
+                        
+                        <div class="slider-item">
+                            <div class="slider-header">
+                                <label class="slider-label">Slouching Threshold</label>
+                                <span class="slider-value" id="distanceThresholdValue">10</span>
+                            </div>
+                            <input type="range" id="distanceThreshold" class="slider" min="5" max="15" value="10" step="1">
+                            <div class="slider-range">
+                                <span>5</span>
+                                <span>15</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="reset-button" id="resetButton">Reset to Default</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/settings.js"></script>
+</body>
+</html>

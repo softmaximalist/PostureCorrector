@@ -4,18 +4,17 @@ It also forwards messages from popup.js to capture.js such as the webcam selecte
 and the warning method selected. Lastly, this file sends a desktop notification or blur and unblur browser tabs
 after receiving messages from capture.js to warn the user about their bad posture.
 */
-let captureIsReady, captureTabId, currentSelectedWebcam, currentProcessingSpeed, currentActivity, 
-    firstWebcamNotSentToCapture, firstProcessingSpeedNotSentToCapture, firstActivityNotSentToCapture;
+let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity, 
+    firstWebcamNotSentToCapture, firstActivityNotSentToCapture;
+let iconPath = chrome.runtime.getURL("src/assets/icons/bird128.png");
 
 function initializeGlobalVariables() {
     const variablesToInit = {
         captureIsReady: false,
         captureTabId: null,
         currentSelectedWebcam: undefined,
-        currentProcessingSpeed: undefined,
         currentActivity: undefined,
         firstWebcamNotSentToCapture: undefined,
-        firstProcessingSpeedNotSentToCapture: undefined,
         firstActivityNotSentToCapture: undefined
     };
 
@@ -23,17 +22,11 @@ function initializeGlobalVariables() {
         captureIsReady = result.hasOwnProperty('captureIsReady') ? result.captureIsReady : variablesToInit.captureIsReady;
         captureTabId = result.hasOwnProperty('captureTabId') ? result.captureTabId : variablesToInit.captureTabId;
         currentSelectedWebcam = result.hasOwnProperty('currentSelectedWebcam') ? result.currentSelectedWebcam : variablesToInit.currentSelectedWebcam;
-        currentProcessingSpeed = result.hasOwnProperty('currentProcessingSpeed') ? result.currentProcessingSpeed : variablesToInit.currentProcessingSpeed;
         currentActivity = result.hasOwnProperty('currentActivity') ? result.currentActivity : variablesToInit.currentActivity;
         if (result.hasOwnProperty('firstWebcamNotSentToCapture')) {
             firstWebcamNotSentToCapture = result.firstWebcamNotSentToCapture;
         } else {
             firstWebcamNotSentToCapture = variablesToInit.firstWebcamNotSentToCapture;
-        }
-        if (result.hasOwnProperty('firstProcessingSpeedNotSentToCapture')) {
-            firstProcessingSpeedNotSentToCapture = result.firstProcessingSpeedNotSentToCapture;
-        } else {
-            firstProcessingSpeedNotSentToCapture = variablesToInit.firstProcessingSpeedNotSentToCapture;
         }
         if (result.hasOwnProperty('firstActivityNotSentToCapture')) {
             firstActivityNotSentToCapture = result.firstActivityNotSentToCapture;
@@ -69,8 +62,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendWarningNotification();
     } else if (message.type === 'webcamSelected' && message.selectedWebcam !== currentSelectedWebcam) {
         sendWebcamInfoToCapture(message.selectedWebcam); 
-    } else if (message.type === 'processingSpeed' && message.processingSpeed !== currentProcessingSpeed) {
-        sendSpeedInfoToCapture(message.processingSpeed);
     } else if (message.type === 'activity' && message.activity !== currentActivity) {
         sendActivityInfoToCapture(message.activity);
     } else if (message.type === 'captureIsReady') {
@@ -95,17 +86,6 @@ function sendWebcamInfoToCapture(webcamId) {
     }
 }
 
-function sendSpeedInfoToCapture(processingSpeed) {
-    currentProcessingSpeed = processingSpeed;
-    chrome.storage.local.set({ currentProcessingSpeed: currentProcessingSpeed });
-    if (captureIsReady) {
-        chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: currentProcessingSpeed });
-    } else {
-        firstProcessingSpeedNotSentToCapture = true;
-        chrome.storage.local.set({ firstProcessingSpeedNotSentToCapture: firstProcessingSpeedNotSentToCapture });
-    }
-}
-
 function sendActivityInfoToCapture(activity) {
     currentActivity = activity;
     chrome.storage.local.set({ currentActivity: currentActivity });
@@ -123,9 +103,6 @@ function setCaptureToReady() {
     if (firstWebcamNotSentToCapture === true) {
         chrome.runtime.sendMessage({ type: 'webcam', selectedWebcam: currentSelectedWebcam });  
     }
-    if (firstProcessingSpeedNotSentToCapture === true) {
-        chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: currentProcessingSpeed });
-    }
     if (firstActivityNotSentToCapture === true) {
         chrome.runtime.sendMessage({ type: 'activity', activity: currentActivity });
     }
@@ -142,7 +119,7 @@ function openCaptureTab() {
     // Use chrome.runtime.getURL to get the full extension URL from the root
     const captureUrl = chrome.runtime.getURL('src/html/capture.html');
     chrome.windows.getCurrent((window) => {
-        chrome.tabs.create({ url: captureUrl, active: false }, (tab) => {
+        chrome.tabs.create({ url: captureUrl, active: true }, (tab) => {
             try {
                 captureTabId = tab.id;
                 chrome.storage.local.set({ captureTabId: captureTabId });
@@ -165,10 +142,8 @@ function resetVariables() {
         'captureIsReady',
         'captureTabId',
         'currentSelectedWebcam',
-        'currentProcessingSpeed',
         'currentActivity',
         'firstWebcamNotSentToCapture',
-        'firstProcessingSpeedNotSentToCapture',
         'firstActivityNotSentToCapture'
     ];
 
@@ -180,10 +155,8 @@ function resetVariables() {
             captureIsReady = false;
             captureTabId = null;
             currentSelectedWebcam = null;
-            currentProcessingSpeed = null;
             currentActivity = null;
             firstWebcamNotSentToCapture = null;
-            firstProcessingSpeedNotSentToCapture = null;
             firstActivityNotSentToCapture = null;
         }
     });
@@ -195,7 +168,7 @@ function sendWarningNotification() {
         title: 'Bad Posture Warning',
         message: 'Bad posture has been detected for more than 5 seconds. Please correct your posture.',
         priority: 2,
-        iconUrl: '../../icons/bird128.png'
+        iconUrl: iconPath
     });
 }
 
@@ -206,7 +179,7 @@ function sendErrorOccuredNotification() {
         message: "An error has occured while processing the video frames. \
          Please wait for the extension to fix the problem or restart the PostureCorrector extension.",
         priority: 2,
-        iconUrl: '../../icons/bird128.png'
+        iconUrl: iconPath
     });
 }
 
@@ -216,6 +189,6 @@ function sendErrorResolvedNotification() {
         title: 'PostureCorrector: Error resolved',
         message: "PostureCorrector has resolved the error that occured earlier. You can continue using the extensin as usual.",
         priority: 2,
-        iconUrl: '../../icons/bird128.png'
+        iconUrl: iconPath
     });
 }

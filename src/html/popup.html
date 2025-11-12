@@ -7,19 +7,31 @@
     <header class="fixed-header">
         <h1 class="extension-title"><img src="../assets/icons/bird128.png" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
     </header>
+    
+    <div class="icon-nav-container">
+        <a href="https://posturecorrector.vercel.app/" target="_blank" class="icon-nav-link">
+            <img src="../assets/popup_icons/home.svg" alt="Home" class="nav-icon-img">
+            <span class="icon-tooltip">Home</span>
+        </a>
+        <a href="https://posturecorrector.vercel.app/#instructions" target="_blank" class="icon-nav-link">
+            <img src="../assets/popup_icons/info.svg" alt="Instructions" class="nav-icon-img">
+            <span class="icon-tooltip">Instructions</span>
+        </a>
+        <a href="statistics.html" target="_blank" class="icon-nav-link">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3v18h18" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18 17l-5-5-3 3-4-4" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="icon-tooltip">User Statistics</span>
+        </a>
+        <a href="settings.html" target="_blank" class="icon-nav-link">
+            <img src="../assets/popup_icons/settings.svg" alt="Settings" class="nav-icon-img">
+            <span class="icon-tooltip">Settings</span>
+        </a>
+    </div>
+    
     <div class="container">
         <div class="toggle-container">
-            <div class="toggle-item">
-                <div class="link-wrapper">
-                    <a href="https://posturecorrector.vercel.app/#instructions" target="_blank" id="link">View Instructions</a>
-                </div>
-            </div>
-            <hr class="divider">
-            <div class="toggle-item">
-                <div class="link-wrapper">
-                    <a href="statistics.html" target="_blank" id="link">View User Statistics</a>
-                </div>
-            </div>
             <hr class="divider">
             <div class="toggle-item">
                 <div class="toggle-description-wrapper">
@@ -40,45 +52,6 @@
                         <span class="slider round">
                             <span class="toggle-text" id="powerText">OFF</span>
                         </span>
-                    </label>
-                </div>
-            </div>
-            <hr class="divider">
-            <div class="radio-container">
-                <h3 class="radio-section-title">Choose frame processing speed:</h3>
-                <div class="radio-item">
-                    <input type="radio" id="fast" name="frameProcessingSpeed" value="fast">
-                    <label for="fast">
-                        <div class="radio-content">
-                            <span class="radio-text-primary">Fast: 1 second per frame</span>
-                            <span class="radio-text-secondary">[Recommended] This option provides the fastest frame processing 
-                                speed, allowing for highly accurate and responsive posture detection. However, it 
-                                is more computationally demanding and may affect system performance on older or slower systems.</span>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="radio-item">
-                    <input type="radio" id="medium" name="frameProcessingSpeed" value="medium">
-                    <label for="medium">
-                        <div class="radio-content">
-                            <span class="radio-text-primary">Medium: 2.5 seconds per frame</span>
-                            <span class="radio-text-secondary">Choose this option if the fastest option above affects your 
-                                system performance. It offers a good balance between responsiveness and reduced 
-                                computational demand, suitable for most computers.</span>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="radio-item">
-                    <input type="radio" id="slow" name="frameProcessingSpeed" value="slow">
-                    <label for="slow">
-                        <div class="radio-content">
-                            <span class="radio-text-primary">Slow: 5 seconds per frame</span>
-                            <span class="radio-text-secondary">Select this option if both faster options above affect your 
-                                system performance. It's the least demanding on your computer, ideal for older or 
-                                slower systems, but posture detection will be performed less frequently.</span>
-                        </div>
                     </label>
                 </div>
             </div>
@@ -110,7 +83,7 @@
             <hr class="divider">
             <div class="toggle-item">
                 <div class="toggle-description-wrapper">
-                    <span class="toggle-description">Save best posture to start posture detection</span>
+                    <span class="toggle-description">Save best posture to start</span>
                 </div>
                 <div class="toggle-switch-wrapper">
                     <label class="toggle-switch">

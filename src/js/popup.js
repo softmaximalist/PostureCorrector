@@ -1,10 +1,9 @@
 const dropdown = document.getElementById('webcamDropdown');
 const saveGoodPostureButton = document.getElementById("goodPosture");
-const speedRadioButtons = document.querySelectorAll('input[name="frameProcessingSpeed"]');
 const activityRadioButtons = document.querySelectorAll('input[name="activity"]');
 const saveButtonMsgElement = document.getElementById('saveButtonMessage');
 let webcamRunning = false;
-let currentProcessingSpeed;
+let currentProcessingSpeed = "fast";
 let currentActivity;
 
 async function getAllWebcams() {
@@ -34,7 +33,6 @@ async function createWebcamDropdown() {
             }
             handleWebcamSelection({ target: dropdown });
         });
-
     }
 }
 
@@ -53,16 +51,6 @@ document.getElementById('powerSwitch').addEventListener('change', function() {
     this.nextElementSibling.querySelector('.toggle-text').textContent = isOn ? 'ON' : 'OFF';
     chrome.storage.local.set({ extensionIsOn: isOn });
     chrome.runtime.sendMessage({ type: 'powerButton', powerState: isOn });
-});
-
-speedRadioButtons.forEach(radio => {
-    radio.addEventListener('change', () => {
-        if (radio.checked) {
-            chrome.storage.local.set({ processingSpeed: radio.value });
-            currentProcessingSpeed = radio.value;
-            chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: radio.value });
-        }
-    });
 });
 
 activityRadioButtons.forEach(radio => {
@@ -87,8 +75,7 @@ saveGoodPostureButton.addEventListener('click', () => {
         }
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     } else {
-        saveButtonMsgElement.textContent = "*Please turn on the extension and select your frame processing " + 
-        "speed and activity before you save your best posture.";
+        saveButtonMsgElement.textContent = "*Please turn on the extension and select your activity before you save your best posture.";
         saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
     }
 });
@@ -109,15 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
+    
+    // Load saved processing speed
     chrome.storage.local.get(['processingSpeed'], result => {
-        speedRadioButtons.forEach(radio => {
-            if (radio.value === result.processingSpeed) {
-                radio.checked = true;
-                currentProcessingSpeed = radio.value;
-                chrome.runtime.sendMessage({ type: 'processingSpeed', processingSpeed: radio.value });
-            }
-        });
+        if (result.processingSpeed) {
+            currentProcessingSpeed = result.processingSpeed;
+        }
     });
 
     chrome.storage.local.get(['activity'], result => {
