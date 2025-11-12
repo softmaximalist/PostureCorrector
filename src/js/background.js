@@ -119,7 +119,7 @@ function openCaptureTab() {
     // Use chrome.runtime.getURL to get the full extension URL from the root
     const captureUrl = chrome.runtime.getURL('src/html/capture.html');
     chrome.windows.getCurrent((window) => {
-        chrome.tabs.create({ url: captureUrl, active: false }, (tab) => {
+        chrome.tabs.create({ url: captureUrl, active: true }, (tab) => {
             try {
                 captureTabId = tab.id;
                 chrome.storage.local.set({ captureTabId: captureTabId });
