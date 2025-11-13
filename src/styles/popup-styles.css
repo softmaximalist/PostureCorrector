@@ -353,8 +353,13 @@ Radio Buttons
     border-color: #BDBDBD;
 }
 
-.radio-item:has(input[type="radio"]:checked) {
+/*.radio-item:has(input[type="radio"]:checked) {
     border-color: #1A73E8;
+    border-width: 3px;
+}*/
+.radio-item:has(input[type="radio"]:checked) {
+    border-color: #fd4646;
+    background-color: #fff5f5;
     border-width: 3px;
 }
 
