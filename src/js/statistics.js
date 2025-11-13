@@ -169,15 +169,28 @@ function createChart() {
                                 `Date: ${dataPoint.date}`,
                                 `Bad Posture Duration: ${badPostureDurationFormatted}`,
                                 `Total Duration: ${totalDurationFormatted}`,
-                                `Bad Posture Percentage: ${dataPoint.badPosturePercentage}%`
+                                `Bad Posture Percentage: ${Math.round(dataPoint.badPosturePercentage)}%`
                             ];
                         }
+                    },
+                    titleFont: {
+                        size: 16
+                    },
+                    bodyFont: {
+                        size: 16
                     }
                 },
                 title: {
                     display: true,
                     text: 'Bad Posture Percentage Over Last 120 Days',
-                    font: { size: 16 }
+                    font: { size: 20 }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16
+                        }
+                    }
                 }
             },
             layout: {
@@ -190,15 +203,22 @@ function createChart() {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Bad Posture Percentage',
-                        font: { size: 14 }
-                    }
+                        text: 'Percentage',
+                        font: { size: 16 }
+                    },
+                    ticks: {
+                        font: { size: 16} 
+                    },
+                    max: 100
                 },
                 x: {
                     title: {
                         display: true,
                         text: 'Day',
-                        font: { size: 14 }
+                        font: { size: 16 }
+                    },
+                    ticks: {
+                        font: { size: 16} 
                     }
                 }
             }
@@ -238,7 +258,27 @@ function createTimeWindowChart() {
                 title: {
                     display: true,
                     text: 'Average Bad Posture Percentage by Time Window',
-                    font: { size: 16 }
+                    font: { size: 20 }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Bad Posture Percentage: ${Math.round(context.parsed.y)}%`;
+                        }
+                    },
+                    titleFont: {
+                        size: 16
+                    },
+                    bodyFont: {
+                        size: 16
+                    }
                 }
             },
             layout: {
@@ -252,9 +292,17 @@ function createTimeWindowChart() {
                     title: { 
                         display: true, 
                         text: 'Percentage', 
-                        font: { size: 14} 
+                        font: { size: 16} 
                     },
-                    max: 100
+                    max: 100,
+                    ticks: {
+                        font: { size: 16} 
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: { size: 14} 
+                    }
                 }
             }
         }
@@ -288,11 +336,32 @@ function createActivityChart() {
                 title: {
                     display: true,
                     text: 'Average Bad Posture Percentage by Activity',
-                    font: { size: 16 }
+                    font: { size: 20 }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Bad Posture Percentage: ${Math.round(context.parsed.y)}%`;
+                        }
+                    },
+                    titleFont: {
+                        size: 16
+                    },
+                    bodyFont: {
+                        size: 16
+                    }
                 }
             },
             layout: {
                 padding: {
+                    left: 10,
                     right: 20  // Add padding to the right side
                 }
             },
@@ -302,9 +371,17 @@ function createActivityChart() {
                     title: { 
                         display: true, 
                         text: 'Percentage', 
-                        font: { size: 14} 
+                        font: { size: 16} 
                     },
-                    max: 100
+                    max: 100,
+                    ticks: {
+                        font: { size: 16} 
+                    }
+                },
+                x: {
+                    ticks: {
+                        font: { size: 16} 
+                    }
                 }
             }
         }
