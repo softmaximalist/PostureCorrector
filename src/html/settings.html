@@ -37,11 +37,11 @@
                     <input type="radio" id="fast" name="frameProcessingSpeed" value="fast">
                     <label for="fast">
                         <div class="radio-content">
-                            <div class="radio-text-primary">⚡ Fast: 1 frame per second</div>
+                            <div class="radio-text-primary">⚡ Real-Time: every second</div>
                             <div class="radio-text-secondary">
-                                [Recommended] This option provides the fastest frame processing 
-                                speed, allowing for highly accurate and responsive posture detection. However, it 
-                                is more computationally demanding and may affect system performance on older or slower systems.
+                                [Recommended] Perform posture detection once every second. This option provides highly responsive 
+                                posture detection. It should run smoothly on most computers and browsers, but it may affect 
+                                system and browser performance on older or slower systems.
                             </div>
                         </div>
                     </label>
@@ -51,11 +51,11 @@
                     <input type="radio" id="medium" name="frameProcessingSpeed" value="medium">
                     <label for="medium">
                         <div class="radio-content">
-                            <div class="radio-text-primary">🚙 Medium: 1 frame per 2.5 seconds</div>
+                            <div class="radio-text-primary">⚖️ Standard: every 2.5 seconds</div>
                             <div class="radio-text-secondary">
-                                Choose this option if the fastest option above affects your 
-                                system performance. It offers a good balance between responsiveness and reduced 
-                                computational demand, suitable for most computers.
+                                Perform posture detection once every 2.5 seconds. This option offers a good balance between
+                                responsiveness and computational demand. Try this option if the “Real-Time” setting slows down 
+                                your system or browser.
                             </div>
                         </div>
                     </label>
@@ -65,11 +65,11 @@
                     <input type="radio" id="slow" name="frameProcessingSpeed" value="slow">
                     <label for="slow">
                         <div class="radio-content">
-                            <div class="radio-text-primary">🐢 Slow: 1 frame per 5 seconds</div>
+                            <div class="radio-text-primary">🔋 Power Saver: every 5 seconds</div>
                             <div class="radio-text-secondary">
-                                Select this option if both faster options above affect your 
-                                system performance. It's the least demanding on your computer, ideal for older or 
-                                slower systems, but posture detection will be performed less frequently.
+                                Perform posture detection once every 5 seconds. his option is lightweight, but detection will 
+                                occur less frequently. Try this option if both the “Real-Time” and “Standard” settings slow down 
+                                your system or browser.
                             </div>
                         </div>
                     </label>
@@ -84,13 +84,14 @@
                 <div class="advanced-content">
                     <p class="advanced-description">
                         Fine-tune posture detection sensitivity by adjusting the threshold values below. 
-                        Lower negative values increase sensitivity for forward head detection, while higher positive values adjust slouching detection.
+                        For the head pitch angle threshold, larger values (closer to 0) make posture detection more sensitive and strict. 
+                        For the head-webcam distance threshold, smaller values (closer to 0) make posture detection more sensitive and strict.
                     </p>
                     
                     <div class="slider-group">
                         <div class="slider-item">
                             <div class="slider-header">
-                                <label class="slider-label">Forward Head Threshold</label>
+                                <label class="slider-label">Head Pitch Angle Threshold</label>
                                 <span class="slider-value" id="pitchAngleThresholdValue">-10</span>
                             </div>
                             <input type="range" id="pitchAngleThreshold" class="slider" min="-15" max="-5" value="-10" step="1">
@@ -102,7 +103,7 @@
                         
                         <div class="slider-item">
                             <div class="slider-header">
-                                <label class="slider-label">Slouching Threshold</label>
+                                <label class="slider-label">Head-Webcam Distance Threshold</label>
                                 <span class="slider-value" id="distanceThresholdValue">10</span>
                             </div>
                             <input type="range" id="distanceThreshold" class="slider" min="5" max="15" value="10" step="1">

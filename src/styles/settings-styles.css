@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background-color: #f0f0f0;
     color: #444;
     min-height: 100vh;
@@ -21,7 +21,7 @@ header {
 }
 
 .title {
-    font-family: Georgia, serif;
+    font-family: Arial;
     font-size: 55px;
     display: flex;
     align-items: center;
@@ -41,7 +41,7 @@ header {
     gap: 20px;
     margin-left: 40px;
     margin-right: 40px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -84,7 +84,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 50px 20px;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
@@ -96,14 +96,14 @@ main {
 }
 
 .section-title {
-    font-family: Georgia, serif;
+    font-family: Arial;
     font-size: 32px;
     margin-bottom: 20px;
     color: #444;
 }
 
 .radio-container {
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     gap: 20px;
     display: flex;
     justify-content: space-between;
@@ -150,15 +150,17 @@ main {
 }
 
 .radio-text-primary {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #333;
     margin-bottom: 8px;
 }
 
 .radio-text-secondary {
-    font-size: 15px;
+    font-size: 18px;
     color: #666;
+    padding-left: 2px;
+    padding-right: 2px;
     line-height: 1.5;
 }
 
@@ -196,14 +198,14 @@ main {
 .slider-group {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 40px;
     margin-bottom: 30px;
 }
 
 .slider-item {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
 }
 
 .slider-header {
@@ -219,7 +221,7 @@ main {
 }
 
 .slider-value {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     color: #fd4646;
     min-width: 40px;
@@ -271,7 +273,7 @@ main {
 .slider-range {
     display: flex;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: 18px;
     color: #999;
     padding: 0 2px;
 }
