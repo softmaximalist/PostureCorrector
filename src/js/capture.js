@@ -26,6 +26,7 @@ let lastTimeWindowDate;
 let cumulativeTimeWindowBadPosDur = 0;
 const minutesUntilNextUpdate = 10;
 let timewindowTimeoutId;
+let saveDataPeriodicallyTimeoutId;
 let longestGoodDurationStart;
 let currentProcessingSpeed = 1000;
 let currentActivity;
@@ -78,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (message.type === 'activity' && message.activity !== currentActivity) {
             if (currentActivity === undefined) {
                 currentActivity = message.activity;
-            } else {
+            } else if (goodPostureSaved) {
                 updateActivityStatistics(message.activity);
             }
         } else if (message.type === 'prepareCaptureTabClosing') {
@@ -121,10 +122,10 @@ function setAndSendDistanceThreshold(thresholdValue) {
 
 function loadOrSetThresholdValuesAndSend() {
     chrome.storage.local.get(['pitchAngleThreshold'], result => {
-        if (result.pitchAngleThresold) {
-            setAndSendPitchAngleThreshold(parseInt(result.pitchAngleThresold));
+        if (result.pitchAngleThreshold) {
+            setAndSendPitchAngleThreshold(parseInt(result.pitchAngleThreshold));
         } else {
-            setAndSendDistanceThreshold(DEFAULT_PITCH_THRESHOLD)
+            setAndSendPitchAngleThreshold(DEFAULT_PITCH_THRESHOLD);
         }
     });
     
@@ -145,8 +146,8 @@ function saveDataPeriodically() {
     updateActivityStatistics(currentActivity);
 
     chrome.storage.local.set({ statistics: data });
-    const delayTime = 10 * 60 * 1000;
-    setTimeout(saveDataPeriodically, delayTime);
+    const delayTime = minutesUntilNextUpdate * 60 * 1000;  // 10 minutes in milliseconds
+    saveDataPeriodicallyTimeoutId = setTimeout(saveDataPeriodically, delayTime);
 }
 
 function setSelectedWebcamAndStartWebcam(selectedWebcam) {
@@ -238,7 +239,9 @@ window.addEventListener('message', (event) => {
     } else if (event.data.type === 'warnUser') {
         chrome.runtime.sendMessage({ type: 'warnUser' });
     } else if (event.data.type === 'result') {
-        updateBadPostureDuration(event.data.duration);
+        if (goodPostureSaved) {
+            updateBadPostureDuration(event.data.duration);
+        }
         if (event.data.pitch !== null) {
             pitchElement.textContent = `${event.data.pitch} degrees`;
         }
@@ -262,6 +265,17 @@ async function initializeData() {
         chrome.storage.local.get(['statistics'], (result) => {
             if (result.statistics !== undefined) {
                 data = result.statistics;
+                // date: data.lastUsedDateStr, 
+                // badPostureDuration: data.dailyBadPostureDuration, 
+                // totalDuration: data.dailyDuration, 
+                // badPosturePercentage: lastDayPercentage 
+                let firstDay = data.badPosturePercentageLast120Days[0];
+                console.log(`daily: ${firstDay.date}, ${firstDay.badPostureDuration}, ${firstDay.totalDuration}, ${firstDay.badPosturePercentage}`);
+                // console.log(`min: ${data.lowestBadPosturePercentage}`);
+                // console.log(`max: ${data.highestBadPosturePercentage}`);
+                console.log(`work: ${data.cumulativeWorkDuration.bad}, ${data.cumulativeWorkDuration.total}`);
+                console.log(`study: ${data.cumulativeStudyDuration.bad}, ${data.cumulativeStudyDuration.total}`);
+                console.log(`entertainment: ${data.cumulativeEntertainmentDuration.bad}, ${data.cumulativeEntertainmentDuration.total}`);
             } else {
                 data = {
                     dailyBadPostureDuration: 0,
@@ -297,6 +311,12 @@ async function waitForData() {
 
 waitForData();
 
+/**
+ * Updates statistics if current date is different from last date. Saves `date`, 
+ * `badPostureDuration`, `totalDuration`, `badPosturePercentage` for last date. Also 
+ * updates `lowestBadPosturePercentage` and `highestBadPosturePercentage`, and resets
+ * `dailyBadPostureDuration` and `dailyDuration` to 0. 
+ */
 function updateDailyStatistics() {
     const currentDateStr = new Date().toDateString();
     if (currentDateStr !== data.lastUsedDateStr && data.lastUsedDateStr !== '') {
@@ -331,10 +351,16 @@ function updateDailyStatistics() {
     }
 }
 
+/**
+ * Updates bad posture duration. Sets a 10 minutes timeout for `saveDataPeriodically()` if it
+ * is the first call to this function. Also updates `longestGoodPostureDuration`, `dailyBadPostureDuration`,
+ * and time window and activity related bad posture durations. 
+ * @param {number} badPostureDuration - Current bad posture duration in seconds. 
+ */
 function updateBadPostureDuration(badPostureDuration) {
     if (firstStatsUpdate === true) {
-        const delayTime = 10 * 60 * 1000;
-        setTimeout(saveDataPeriodically, delayTime);
+        const delayTime = 10 * 60 * 1000;  // 10 minutes (in milliseconds)
+        saveDataPeriodicallyTimeoutId = setTimeout(saveDataPeriodically, delayTime);
         longestGoodDurationStart = Date.now();
         firstStatsUpdate = false;
     }
@@ -351,7 +377,11 @@ function updateBadPostureDuration(badPostureDuration) {
         }
     } else if (badPostureDuration === 0) {
         if (consecBadPosDur > 0) {  // Good Posture Just Started
+            // prevTimeWindowUpdateConsecBadPosDur is positive only when this is the first update to
+            // cumulativeTimeWindowBadPosDur after crossing time window with bad posture
             cumulativeTimeWindowBadPosDur += (consecBadPosDur - prevTimeWindowUpdateConsecBadPosDur);
+            // prevActivityUpdateConsecBadPosDur is positive only when this is the first update to
+            // cumulativeActivityBadPostDur after crossing time window with bad posture
             cumulativeActivityBadPostDur += (consecBadPosDur - prevActivityUpdateConsecBadPosDur);
             data.dailyBadPostureDuration += consecBadPosDur;
             consecBadPosDur = 0;
@@ -367,30 +397,35 @@ function updateBadPostureDuration(badPostureDuration) {
     }
 }
 
+/**
+ * Updates time window statistics. It is called every 10 minutes unless there is less than
+ * 10 minutes to the next time window. In that case, a timeout is set to get called when next 
+ * time window starts.
+ */
 function updateTimewindowStatistics() {
     const currentDate = new Date();
     const hour = currentDate.getHours();
     const newWindow = Math.floor(hour / 3);
 
-    
+    // If first call to this function (i.e., session just started)
     if (currentTimeWindow === undefined) {
         currentTimeWindow = newWindow;
-        lastTimeWindowDate = currentDate;
     } else {
-        const currentTimeWindowBadPostureDuration = (cumulativeTimeWindowBadPosDur + 
-            (consecBadPosDur - prevTimeWindowUpdateConsecBadPosDur));
-        const currentTimeWindowDuration = Math.floor((currentDate - lastTimeWindowDate) / 1000);
+        // cumulativeTimeWindowBadPosDur does not include ongoing bad posture duration (consecBadPosDur)
+        const currentTimeWindowBadPostureDuration = cumulativeTimeWindowBadPosDur + consecBadPosDur;
+        let currentTimeWindowDuration = Math.floor((currentDate - lastTimeWindowDate) / 1000);
         if (currentTimeWindowBadPostureDuration > currentTimeWindowDuration) {
             currentTimeWindowDuration = currentTimeWindowBadPostureDuration;
         }
-        prevTimeWindowUpdateConsecBadPosDur = consecBadPosDur;
+        prevTimeWindowUpdateConsecBadPosDur = consecBadPosDur;  // Positive only if bad posture is ongoing
         let timeWindowData = data.cumulativeTimeWindowDuration[currentTimeWindow];
         timeWindowData.bad += currentTimeWindowBadPostureDuration;
         timeWindowData.total += currentTimeWindowDuration;
         cumulativeTimeWindowBadPosDur = 0;
-        lastTimeWindowDate = currentDate;
     }
+    lastTimeWindowDate = currentDate;
 
+    // If the time window has changed, then update to new time window
     if (newWindow !== currentTimeWindow) {
         currentTimeWindow = newWindow;
     }
@@ -398,21 +433,28 @@ function updateTimewindowStatistics() {
     const minutesUntilNextWindow = 180 - (hour % 3) * 60 - currentDate.getMinutes();
     if (minutesUntilNextWindow < minutesUntilNextUpdate) {
         const millisecondsUntilNextWindow = minutesUntilNextWindow * 60 * 1000;
-        setTimeout(updateTimewindowStatistics, millisecondsUntilNextWindow);    
+        timewindowTimeoutId = setTimeout(updateTimewindowStatistics, millisecondsUntilNextWindow);    
     } else {
         const millisecondsUntilNextUpdate = minutesUntilNextUpdate * 60 * 1000
-        setTimeout(updateTimewindowStatistics, millisecondsUntilNextUpdate);
+        timewindowTimeoutId = setTimeout(updateTimewindowStatistics, millisecondsUntilNextUpdate);
     }
 }
 
+/**
+ * Updates activity statistics including resetting `currentActivityTimestamp`,
+ * `prevActivityUpdateConsecBadPosDur`, and `cumulativeActivityBadPostDur`.
+ * @param {string} newActivity - The new activity type. 
+ */
 function updateActivityStatistics(newActivity) {
     const nextTimestamp = Date.now();
-    const currentActivityDuration = Math.floor((nextTimestamp - currentActivityTimestamp) / 1000);
-    const currentActivityBadPostureDuration = (cumulativeActivityBadPostDur + (consecBadPosDur - prevActivityUpdateConsecBadPosDur));
+    // currentActivityTimestamp is set below and when session starts
+    let currentActivityDuration = Math.floor((nextTimestamp - currentActivityTimestamp) / 1000);
+    // cumulativeActivityBadPostDur does not include ongoing bad posture duration (consecBadPosDur)
+    const currentActivityBadPostureDuration = cumulativeActivityBadPostDur + consecBadPosDur;
     if (currentActivityBadPostureDuration > currentActivityDuration) {
         currentActivityDuration = currentActivityBadPostureDuration;
     }
-    prevActivityUpdateConsecBadPosDur = consecBadPosDur;
+    prevActivityUpdateConsecBadPosDur = consecBadPosDur;  // positive only if bad posture is ongoing
     cumulativeActivityBadPostDur = 0;
     currentActivityTimestamp = nextTimestamp;
     
@@ -433,15 +475,17 @@ function updateActivityStatistics(newActivity) {
 function prepareForTabClosing() {
     stopCapture();
     webcamRunning = false;
-    const endTimestamp = Date.now();
-    data.dailyDuration += Math.floor((endTimestamp - startTimestamp) / 1000);
-    data.dailyBadPostureDuration += consecBadPosDur;
-
-    updateTimewindowStatistics();
-    updateActivityStatistics(currentActivity);
     
-    // Clear all setTimeout/setInterval
-    clearTimeout(updateTimewindowStatistics);
-    clearTimeout(updateDailyStatistics);
-    clearInterval(captureAndSendFrame);
+    if (goodPostureSaved) {
+        const endTimestamp = Date.now();
+        data.dailyDuration += Math.floor((endTimestamp - startTimestamp) / 1000);
+        data.dailyBadPostureDuration += consecBadPosDur;
+    
+        updateTimewindowStatistics();
+        updateActivityStatistics(currentActivity);
+        
+        // Clear all setTimeout
+        clearTimeout(timewindowTimeoutId);
+        clearTimeout(saveDataPeriodicallyTimeoutId);
+    }
 }
