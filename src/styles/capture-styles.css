@@ -21,7 +21,6 @@ header {
 }
 
 .title {
-    font-family: Georgia, serif;
     font-size: 55px;
     display: flex;
     align-items: center;
@@ -50,7 +49,7 @@ main {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .data {
@@ -69,8 +68,8 @@ main {
 }
 
 .video-section {
-    width: 100%;
-    max-width: 800px;
+    width: 40%;
+    max-width: 900px;
     margin-bottom: 20px;
 }
 
@@ -79,11 +78,10 @@ main {
     justify-content: space-between;
     font-size: 30px;
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .video-section video {
-    /* box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5); */
     border-radius: 10px;
 }
 
@@ -91,6 +89,42 @@ main {
     width: 100%;
     height: auto;
     display: block;
+}
+
+.button-section {
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.button-description {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.save-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.save-button:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.save-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 

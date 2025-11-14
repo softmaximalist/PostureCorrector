@@ -17,6 +17,8 @@ const distanceElement = document.getElementById('distance');
 const timeElement = document.getElementById('time');
 const webglErrorElement = document.getElementById('webgl-error');
 const sandboxElement = document.getElementById('sandboxFrame');
+const saveGoodPostureButton = document.getElementById("save-posture-button");
+const saveButtonMsgElement = document.getElementById('save-button-message');
 let canvas, ctx;
 let consecBadPosDur = 0;
 let prevActivityUpdateConsecBadPosDur = 0; 
@@ -48,6 +50,7 @@ const DEFAULT_DISTANCE_THRESHOLD = 10;
 
 document.addEventListener('DOMContentLoaded', function() {
     domContentLoaded = true;
+    setupGoodPostureSaveButtonListener();
     
     // Load processing speed if there is saved data
     chrome.storage.local.get(['processingSpeed'], result => {
@@ -62,18 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (message.type === 'webcam' && message.selectedWebcam !== currentSelectedWebcam) {
             setSelectedWebcamAndStartWebcam(message.selectedWebcam);
-        } else if (message.type === 'saveGoodPosture') {
-            if (sandboxIsReady) {
-                sandboxElement.contentWindow.postMessage({ type: 'saveGoodPosture'}, '*');
-            }
-            if (!goodPostureSaved) { 
-                startTimestamp = Date.now();
-                currentActivityTimestamp = startTimestamp;
-                updateDailyStatistics();
-                data.lastUsedDateStr = new Date(startTimestamp).toDateString();
-                updateTimewindowStatistics();
-                goodPostureSaved = true;
-            }
         } else if (message.type === 'processingSpeed' && message.processingSpeed !== currentProcessingSpeed) {
             setProcessingSpeedAndStartWebcam(message.processingSpeed);
         } else if (message.type === 'activity' && message.activity !== currentActivity) {
@@ -108,6 +99,38 @@ function computeProcessingSpeedInMilliseconds(processingSpeed) {
         return 5000;
     }
     return null;
+}
+
+function setupGoodPostureSaveButtonListener() {
+    saveGoodPostureButton.addEventListener('click', () => {
+        if (webcamRunning && currentProcessingSpeed && currentActivity) {
+            if (sandboxIsReady) {
+                sandboxElement.contentWindow.postMessage({ type: 'saveGoodPosture'}, '*');
+            }
+            
+            if (!goodPostureSaved) { 
+                startTimestamp = Date.now();
+                currentActivityTimestamp = startTimestamp;
+                updateDailyStatistics();
+                data.lastUsedDateStr = new Date(startTimestamp).toDateString();
+                updateTimewindowStatistics();
+                goodPostureSaved = true;
+            }
+
+            if (currentProcessingSpeed === 'fast') {
+                saveButtonMsgElement.textContent = '*Please maintain your best posture for 1 second to save it.';
+            } else if (currentProcessingSpeed === 'medium') {
+                saveButtonMsgElement.textContent = '*Please maintain your best posture for 2.5 seconds to save it.';
+            } else if (currentProcessingSpeed === 'slow') {
+                saveButtonMsgElement.textContent = '*Please maintain your best posture for 5 seconds to save it.';
+            }
+            
+            saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            saveButtonMsgElement.textContent = "*Please try again.";
+            saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
 }
 
 function setAndSendPitchAngleThreshold(thresholdValue) {
