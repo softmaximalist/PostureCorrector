@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Georgia;
+    font-family: Arial, sans-serif;
 }
 
 .fixed-header {
@@ -88,7 +88,6 @@ body {
     padding: 8px 14px;
     border-radius: 8px;
     font-size: 13px;
-    font-family: Arial, sans-serif;
     font-weight: 600;
     white-space: nowrap;
     opacity: 0;
@@ -124,7 +123,7 @@ body {
     border: none;
     height: 1px;
     background-color: #cccccc; /* Light gray color */
-    margin: 5px 0; /* Adjust top and bottom margin as needed */
+    margin: 15px; /* Adjust top and bottom margin as needed */
     width: 100%; /* Fixed width, adjust as needed */
 }
 
@@ -149,7 +148,6 @@ select {
 
 /* Container for the switches */
 .toggle-container {
-    font-family: Helvetica, sans-serif;
     padding: 0 10px 0 10px;
 }
 
@@ -171,7 +169,6 @@ select {
 /* Description text for each toggle */
 .toggle-description {
     word-break: break-word; /* Ensure long text wraps to the next line */
-    font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 18px;
     color: #333;
@@ -187,13 +184,15 @@ select {
 }
 
 #webcamDropdown {
-    font-family: Arial, sans-serif;
     font-size: 16px;
     color: #333; /* Text color */
-    background-color: #f0f0f0; /* Background color */
-    border: 1px solid #ccc;
+    /*background-color: #f0f0f0; /* Background color */
+    /*border: 1px solid #ccc;*/
     padding: 5px;
     border-radius: 4px;
+    border-color: #fd4646;
+    background-color: #fff5f5;
+    border-width: 3px;
 }
 
 #webcamDropdown option {
@@ -214,17 +213,18 @@ select {
     display: flex;
     justify-content: flex-end;
     width: 100%;
+    margin-bottom: 10px;
 }
 
 /* Toggle switch style */
-.toggle-switch, .button {
+#toggle-switch, .button {
     position: relative;
     display: inline-block;
     width: 80px;
     height: 30px;
 }
 
-.toggle-switch input {
+#toggle-switch input {
     opacity: 0;
     width: 0;
     height: 0;
@@ -277,7 +277,6 @@ input:checked + .slider:before {
     font-size: 13px;
     color: white;
     font-weight: 700;
-    font-family: Arial, Helvetica, sans-serif;
 }
 
 input:checked + .slider .toggle-text {
@@ -294,8 +293,6 @@ input:not(:checked) + .slider .toggle-text {
 Radio Buttons 
 */
 .radio-container {
-    font-family: Arial, sans-serif;
-    max-width: 300px;
     margin-top: 13px;
     margin-bottom: 13px;
 }
@@ -312,9 +309,12 @@ Radio Buttons
     align-items: center;
     margin-bottom: 10px;
     background-color: #ffffff;
-    border: 2px solid #e0e0e0a3;
+    border: 3px solid #e0e0e0a3;
     border-radius: 8px;
     transition: all 0.1s ease;
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .radio-item:last-child {
@@ -329,7 +329,7 @@ Radio Buttons
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 8px 14px;
+    padding: 12px;
     cursor: pointer;
 }
 
@@ -344,7 +344,7 @@ Radio Buttons
 }
 
 .radio-item .radio-text {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     color: #000000;
 }
@@ -359,34 +359,7 @@ Radio Buttons
     border-width: 3px;
 }
 
-/*
-Save Good Posture Button
-*/
-button#goodPosture {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    cursor: pointer;
-    background-color: #fd4646;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-button#goodPosture:active,
-button#goodPosture.clicked {
-    transform: scale(0.95);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    background-color: #fd4646;
-}
-
-/* button#goodPosture:hover {
-    background-color: #c92121;
-} */
-
-#saveButtonMessage {
+#power-on-error-message {
     width: 100%;
     font-size: 16px;
     margin-top: 5px;

@@ -42,20 +42,6 @@
                 </div>
             </div>
             <hr class="divider">
-            <div class="toggle-item">
-                <div class="toggle-description-wrapper">
-                    <span class="toggle-description">Turn extension ON/OFF</span>
-                </div>
-                <div class="toggle-switch-wrapper">
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="powerSwitch">
-                        <span class="slider round">
-                            <span class="toggle-text" id="powerText">OFF</span>
-                        </span>
-                    </label>
-                </div>
-            </div>
-            <hr class="divider">
             <div class="radio-container">
                 <h3 class="radio-section-title">Choose your activity:</h3>
                 <div class="radio-item">
@@ -83,15 +69,18 @@
             <hr class="divider">
             <div class="toggle-item">
                 <div class="toggle-description-wrapper">
-                    <span class="toggle-description">Save best posture to start</span>
+                    <span class="toggle-description">Turn extension ON/OFF</span>
                 </div>
                 <div class="toggle-switch-wrapper">
-                    <label class="toggle-switch">
-                        <button id="goodPosture">SAVE</button>
+                    <label id="toggle-switch">
+                        <input type="checkbox" id="powerSwitch" disabled>
+                        <span class="slider round">
+                            <span class="toggle-text" id="powerText">OFF</span>
+                        </span>
                     </label>
                 </div>
             </div>
-            <p id="saveButtonMessage"></p>
+            <p id="power-on-error-message"></p>
         </div>
     </div>
 
