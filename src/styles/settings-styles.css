@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial;
-    /*color: #444;*/
+    color: #444;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
