@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PostureCorrector - Settings</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/bird16.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/square_logo.svg">
     <link rel="stylesheet" href="../styles/settings-styles.css">
 </head>
 <body>
     <header>
-        <h1 class="title"><img src="../assets/icons/bird128.png" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
+        <h1 class="title"><img src="../assets/icons/square_logo.svg" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
         <nav class="top-nav">
             <a href="statistics.html" class="nav-link">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +34,7 @@
             <h2 class="section-title">Posture Detection Frequency</h2>
             <div class="radio-container">
                 <div class="radio-item">
-                    <input type="radio" id="fast" name="frameProcessingSpeed" value="fast">
+                    <input type="radio" id="fast" name="frameProcessingSpeed" value="1000">
                     <label for="fast">
                         <div class="radio-content">
                             <div class="radio-text-primary">⚡ Real-Time: every second</div>
@@ -48,10 +48,10 @@
                 </div>
 
                 <div class="radio-item">
-                    <input type="radio" id="medium" name="frameProcessingSpeed" value="medium">
+                    <input type="radio" id="medium" name="frameProcessingSpeed" value="2500">
                     <label for="medium">
                         <div class="radio-content">
-                            <div class="radio-text-primary">⚖️ Standard: every 2.5 seconds</div>
+                            <div class="radio-text-primary">⚖️ Balanced: every 2.5 seconds</div>
                             <div class="radio-text-secondary">
                                 Perform posture detection once every 2.5 seconds. This option offers a good balance between
                                 responsiveness and computational demand. Try this option if the “Real-Time” setting slows down 
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="radio-item">
-                    <input type="radio" id="slow" name="frameProcessingSpeed" value="slow">
+                    <input type="radio" id="slow" name="frameProcessingSpeed" value="5000">
                     <label for="slow">
                         <div class="radio-content">
                             <div class="radio-text-primary">🔋 Power Saver: every 5 seconds</div>
