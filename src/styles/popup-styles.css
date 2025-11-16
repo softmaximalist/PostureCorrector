@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
+    color: #444;
 }
 
 .fixed-header {
@@ -18,7 +19,6 @@ body {
     padding: 15px 20px;
     font-family: Arial;
     font-weight: 900;
-    color: #444;
     font-size: 26px; /* Adjust as needed */
     text-align: center;
     border-bottom: 1px solid #cccccc; /* Optional: adds a subtle separator */
@@ -52,13 +52,11 @@ body {
     justify-content: center;
     width: 35px;
     height: 45px;
-    /*background: linear-gradient(135deg, #fd4646 0%, #ff6b6b 100%);*/
     border-radius: 12px;
     text-decoration: none;
     color: white;
     font-size: 24px;
     transition: all 0.3s ease;
-    /*box-shadow: 0 3px 10px rgba(253, 70, 70, 0.3);*/
 }
 
 .nav-icon-img {
@@ -68,13 +66,10 @@ body {
 
 .icon-nav-link:hover {
     transform: translateY(-5px);
-    /*box-shadow: 0 6px 20px rgba(253, 70, 70, 0.4);*/
-    /*background: linear-gradient(135deg, #ff5252 0%, #ff7979 100%);*/
 }
 
 .icon-nav-link:active {
     transform: translateY(-2px);
-    /*box-shadow: 0 4px 15px rgba(253, 70, 70, 0.35);*/
 }
 
 /* Tooltip on Hover */
@@ -171,7 +166,6 @@ select {
     word-break: break-word; /* Ensure long text wraps to the next line */
     font-weight: bold;
     font-size: 18px;
-    color: #333;
 }
 
 #link {
@@ -185,7 +179,6 @@ select {
 
 #webcamDropdown {
     font-size: 16px;
-    color: #333; /* Text color */
     /*background-color: #f0f0f0; /* Background color */
     /*border: 1px solid #ccc;*/
     padding: 5px;
@@ -346,7 +339,6 @@ Radio Buttons
 .radio-item .radio-text {
     font-size: 18px;
     font-weight: bold;
-    color: #000000;
 }
 
 .radio-item:hover {
