@@ -19,6 +19,7 @@ const webglErrorElement = document.getElementById('webgl-error');
 const sandboxElement = document.getElementById('sandboxFrame');
 const saveGoodPostureButton = document.getElementById("save-posture-button");
 const saveButtonMsgElement = document.getElementById('save-button-message');
+let saveButtonMsgTimeoutId;
 let canvas, ctx;
 let consecBadPosDur = 0;
 let prevActivityUpdateConsecBadPosDur = 0; 
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load processing speed if there is saved data
     chrome.storage.local.get(['processingSpeed'], result => {
         if (result.processingSpeed) {
-            currentProcessingSpeed = computeProcessingSpeedInMilliseconds(result.processingSpeed);
+            currentProcessingSpeed = result.processingSpeed;
         }
     });
     
@@ -90,17 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
     chrome.runtime.sendMessage({ type: 'captureIsReady' });
 });
 
-function computeProcessingSpeedInMilliseconds(processingSpeed) {
-    if (processingSpeed === "fast") {
-        return 1000;
-    } else if (processingSpeed === "medium") {
-        return 2500;
-    } else if (processingSpeed === "slow") {
-        return 5000;
-    }
-    return null;
-}
-
 function setupGoodPostureSaveButtonListener() {
     saveGoodPostureButton.addEventListener('click', () => {
         if (webcamRunning && currentProcessingSpeed && currentActivity) {
@@ -117,29 +107,36 @@ function setupGoodPostureSaveButtonListener() {
                 goodPostureSaved = true;
             }
 
-            if (currentProcessingSpeed === 'fast') {
+            if (currentProcessingSpeed === 1000) {
                 saveButtonMsgElement.textContent = '*Please maintain your best posture for 1 second to save it.';
-            } else if (currentProcessingSpeed === 'medium') {
+                clearTimeout(saveButtonMsgTimeoutId);
+                saveButtonMsgTimeoutId = setTimeout(() => { saveButtonMsgElement.textContent = ''; }, 2500);
+            } else if (currentProcessingSpeed === 2500) {
                 saveButtonMsgElement.textContent = '*Please maintain your best posture for 2.5 seconds to save it.';
-            } else if (currentProcessingSpeed === 'slow') {
+                clearTimeout(saveButtonMsgTimeoutId);
+                saveButtonMsgTimeoutId = setTimeout(() => { saveButtonMsgElement.textContent = ''; }, 3500);
+            } else if (currentProcessingSpeed === 5000) {
                 saveButtonMsgElement.textContent = '*Please maintain your best posture for 5 seconds to save it.';
+                clearTimeout(saveButtonMsgTimeoutId);
+                saveButtonMsgTimeoutId = setTimeout(() => { saveButtonMsgElement.textContent = ''; }, 6000);
             }
-            
             saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
         } else {
             saveButtonMsgElement.textContent = "*Please try again.";
+            clearTimeout(saveButtonMsgTimeoutId);
+            saveButtonMsgTimeoutId = setTimeout(() => { saveButtonMsgElement.textContent = ''; }, 4000);
             saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
         }
     });
 }
 
 function setAndSendPitchAngleThreshold(thresholdValue) {
-    headPitchAngleThreshold = thresholdValue;
+    const headPitchAngleThreshold = thresholdValue;
     sandboxElement.contentWindow.postMessage({ type: 'pitchAngleThreshold', value: headPitchAngleThreshold}, '*');
 }
 
 function setAndSendDistanceThreshold(thresholdValue) {
-    headWebcamDistanceThreshold = thresholdValue;
+    const headWebcamDistanceThreshold = thresholdValue;
     sandboxElement.contentWindow.postMessage({ type: 'distanceThreshold', value: headWebcamDistanceThreshold}, '*');
 }
 
@@ -182,7 +179,7 @@ function setSelectedWebcamAndStartWebcam(selectedWebcam) {
 }
 
 function setProcessingSpeedAndStartWebcam(processingSpeed) {
-    currentProcessingSpeed = computeProcessingSpeedInMilliseconds(processingSpeed);
+    currentProcessingSpeed = processingSpeed;
 
     if (currentSelectedWebcam && currentProcessingSpeed) {
         startWebcam(currentSelectedWebcam, currentProcessingSpeed);
@@ -288,17 +285,6 @@ async function initializeData() {
         chrome.storage.local.get(['statistics'], (result) => {
             if (result.statistics !== undefined) {
                 data = result.statistics;
-                // date: data.lastUsedDateStr, 
-                // badPostureDuration: data.dailyBadPostureDuration, 
-                // totalDuration: data.dailyDuration, 
-                // badPosturePercentage: lastDayPercentage 
-                let firstDay = data.badPosturePercentageLast120Days[0];
-                console.log(`daily: ${firstDay.date}, ${firstDay.badPostureDuration}, ${firstDay.totalDuration}, ${firstDay.badPosturePercentage}`);
-                // console.log(`min: ${data.lowestBadPosturePercentage}`);
-                // console.log(`max: ${data.highestBadPosturePercentage}`);
-                console.log(`work: ${data.cumulativeWorkDuration.bad}, ${data.cumulativeWorkDuration.total}`);
-                console.log(`study: ${data.cumulativeStudyDuration.bad}, ${data.cumulativeStudyDuration.total}`);
-                console.log(`entertainment: ${data.cumulativeEntertainmentDuration.bad}, ${data.cumulativeEntertainmentDuration.total}`);
             } else {
                 data = {
                     dailyBadPostureDuration: 0,
@@ -508,6 +494,7 @@ function prepareForTabClosing() {
         updateActivityStatistics(currentActivity);
         
         // Clear all setTimeout
+        clearTimeout(saveButtonMsgTimeoutId);
         clearTimeout(timewindowTimeoutId);
         clearTimeout(saveDataPeriodicallyTimeoutId);
     }
