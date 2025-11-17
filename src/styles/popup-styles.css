@@ -16,10 +16,9 @@ body {
 
 .extension-title {
     margin: 0;
-    padding: 15px 20px;
-    font-family: Arial;
+    padding: 0.9375rem 1.25rem;
     font-weight: 900;
-    font-size: 26px; /* Adjust as needed */
+    font-size: 1.625rem;
     text-align: center;
     border-bottom: 1px solid #cccccc; /* Optional: adds a subtle separator */
     display: flex;
@@ -38,10 +37,9 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    /*gap: 3px;*/
-    padding: 75px 30px 5px 25px;
+    padding: 4.6875rem 1.875rem 0.3125rem 1.5625rem;
     margin-top: 0;
-    margin-bottom: 5px;
+    margin-bottom: 0.3125rem;
 }
 
 /* Individual Icon Link */
@@ -55,7 +53,7 @@ body {
     border-radius: 12px;
     text-decoration: none;
     color: white;
-    font-size: 24px;
+    font-size: 1.5rem;
     transition: all 0.3s ease;
 }
 
@@ -80,9 +78,9 @@ body {
     transform: translateX(-50%);
     background-color: #333;
     color: white;
-    padding: 8px 14px;
+    padding: 0.5rem 0.875rem;
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     white-space: nowrap;
     opacity: 0;
@@ -117,33 +115,33 @@ body {
 .divider {
     border: none;
     height: 1px;
-    background-color: #cccccc; /* Light gray color */
-    margin: 15px; /* Adjust top and bottom margin as needed */
-    width: 100%; /* Fixed width, adjust as needed */
+    background-color: #cccccc;
+    margin: 0.9375rem;
+    width: 100%;
 }
 
 /* Override for dividers that need to extend beyond toggle-container padding */
 .toggle-container .divider {
-    width: calc(100% + 20px); /* Extends 10px on each side to match .container width */
-    margin-left: -10px; /* Shifts it left */
+    width: calc(100% + 1.25rem); /* Extends 10px on each side to match .container width */
+    margin-left: -0.625rem; /* Shifts it left */
 }
 
 .container {
     width: 320px; /* Set the maximum width you want */
-    padding: 0 30px 0 30px;
+    padding: 0 1.875rem;
     box-sizing: border-box;
 }
 
 select {
     width: 100%;
-    padding: 5px;
+    padding: 0.3125rem;
     margin: 0;
     border-radius: 5px;
 }
 
 /* Container for the switches */
 .toggle-container {
-    padding: 0 10px 0 10px;
+    padding: 0 0.625rem;
 }
 
 /* Container for each toggle item */
@@ -151,21 +149,21 @@ select {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 13px;
-    margin-bottom: 13px;
+    margin-top: 0.8125rem;
+    margin-bottom: 0.8125rem;
 }
 
 .toggle-description-wrapper {
     flex-grow: 1;
-    margin-right: 10px;
-    margin-bottom: 8px;
+    margin-right: 0.625rem;
+    margin-bottom: 0.5rem;
 }
 
 /* Description text for each toggle */
 .toggle-description {
     word-break: break-word; /* Ensure long text wraps to the next line */
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 
 #link {
@@ -173,15 +171,13 @@ select {
     text-align: center;
     width: 100%;
     color: #3c8cef;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
 }
 
 #webcamDropdown {
-    font-size: 16px;
-    /*background-color: #f0f0f0; /* Background color */
-    /*border: 1px solid #ccc;*/
-    padding: 5px;
+    font-size: 1rem;
+    padding: 0.3125rem;
     border-radius: 4px;
     border-color: #fd4646;
     background-color: #fff5f5;
@@ -198,15 +194,15 @@ select {
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     width: 100%; /* Ensure it takes up the full width of its parent */
-    margin-right: 10px;
-    margin-bottom: 15px;
+    margin-right: 0.625rem;
+    margin-bottom: 0.9375rem;
 }
 
 .toggle-switch-wrapper {
     display: flex;
     justify-content: flex-end;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
 }
 
 /* Toggle switch style */
@@ -267,7 +263,7 @@ input:checked + .slider:before {
     top: 50%;
     left: 50%;
     transform: translateY(-50%);
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: white;
     font-weight: 700;
 }
@@ -286,21 +282,21 @@ input:not(:checked) + .slider .toggle-text {
 Radio Buttons 
 */
 .radio-container {
-    margin-top: 13px;
-    margin-bottom: 13px;
+    margin-top: 0.8125rem;
+    margin-bottom: 0.8125rem;
 }
 
 .radio-section-title {
-    font-size: 18px;
+    font-size: 1.125rem;
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
     font-weight: bold;
 }
 
 .radio-item {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
     background-color: #ffffff;
     border: 3px solid #e0e0e0a3;
     border-radius: 8px;
@@ -322,7 +318,7 @@ Radio Buttons
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 12px;
+    padding: 0.75rem;
     cursor: pointer;
 }
 
@@ -332,12 +328,12 @@ Radio Buttons
 }
 
 .radio-item .icon {
-    font-size: 20px;
-    margin-right: 12px;
+    font-size: 1.25rem;
+    margin-right: 0.625rem;
 }
 
 .radio-item .radio-text {
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: bold;
 }
 
@@ -353,8 +349,8 @@ Radio Buttons
 
 #power-on-error-message {
     width: 100%;
-    font-size: 16px;
-    margin-top: 5px;
+    font-size: 1rem;
+    margin-top: 0.3125rem;
     color: #fd4646;
     word-break: break-word;
 }

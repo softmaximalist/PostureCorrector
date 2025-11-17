@@ -17,11 +17,11 @@ body {
 }
 
 header {
-    padding: 20px;
+    padding: 1.25rem;
 }
 
 .title {
-    font-size: 55px;
+    font-size: 3.4375rem;
     display: flex;
     align-items: center;
 }
@@ -29,8 +29,8 @@ header {
 .title-icon {
     width: 60px;
     height: 60px;
-    margin-right: 10px;
-    margin-left: 40px;
+    margin-right: 0.625rem;
+    margin-left: 2.5rem;
 }
 
 main {
@@ -38,7 +38,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 1.25rem;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
@@ -48,7 +48,7 @@ main {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 }
 
 .data {
@@ -57,27 +57,27 @@ main {
 }
 
 .data p:first-child {
-    font-size: 19px;
-    margin-bottom: 5px;
+    font-size: 1.1875rem;
+    margin-bottom: 0.3125rem;
 }
 
 .data p:last-child {
-    font-size: 50px;
+    font-size: 3.125rem;
     font-weight: bold;
 }
 
 .video-section {
     width: 40%;
     max-width: 900px;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 }
 
 .error-section {
     display: flex;
     justify-content: space-between;
-    font-size: 30px;
+    font-size: 1.875rem;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 }
 
 .video-section video {
@@ -92,22 +92,22 @@ main {
 
 .button-section {
     text-align: center;
-    margin-bottom: 10px;
-    margin-top: 5px;
+    margin-bottom: 0.625rem;
+    margin-top: 0.3125rem;
 }
 
 .button-description {
-    font-size: 18px;
+    font-size: 1.125rem;
     color: #666;
-    margin-bottom: 15px;
+    margin-bottom: 0.9375rem;
 }
 
 .save-button {
     background-color: #e74c3c;
     color: white;
     border: none;
-    padding: 15px 40px;
-    font-size: 18px;
+    padding: 0.9375rem 2.5rem;
+    font-size: 1.125rem;
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
@@ -128,8 +128,8 @@ main {
 
 #save-button-message {
     width: 100%;
-    font-size: 18px;
-    margin-top: 10px;
+    font-size: 1.125rem;
+    margin-top: 0.625rem;
     color: #fd4646;
     word-break: break-word;
 }
@@ -140,6 +140,6 @@ main {
     }
     
     .data-section > div {
-        margin-bottom: 10px;
+        margin-bottom: 0.625rem;
     }
 }
