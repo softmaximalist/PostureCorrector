@@ -10,10 +10,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: 
-        radial-gradient(ellipse at top left, #FFB3B3 0%, transparent 70%),
-        radial-gradient(ellipse at bottom right, #f5f5f5 0%, transparent 50%),
-        #eeeeee;
+    background: #eeeeee;
 }
 
 header {
