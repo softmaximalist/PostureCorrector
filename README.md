@@ -1,6 +1,6 @@
 # PostureCorrector
 
-Copyright (c) 2025 880babur710. All rights reserved.
+Copyright (c) 2025 Softmaximalist. All rights reserved.
 
 ## Notice
 This repository is for code review purposes only. 
