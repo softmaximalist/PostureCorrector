@@ -6,23 +6,19 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    /* background-color: #8EC5FC;
-    background-image: linear-gradient(90deg, #2e91f386, #8EC5FC); */
-    /* color: white; */
     color: #444;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: #eeeeee;
 }
 
 header {
-    padding: 20px;
+    padding: 1.25rem;
 }
 
 .title {
-    font-family: Georgia, serif;
-    font-size: 55px;
+    font-size: 3.4375rem;
     display: flex;
     align-items: center;
 }
@@ -30,8 +26,8 @@ header {
 .title-icon {
     width: 60px;
     height: 60px;
-    margin-right: 10px;
-    margin-left: 40px;
+    margin-right: 0.625rem;
+    margin-left: 2.5rem;
 }
 
 main {
@@ -39,18 +35,17 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 1.25rem;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
 }
 
-
 .data-section {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 1.25rem;
 }
 
 .data {
@@ -59,31 +54,30 @@ main {
 }
 
 .data p:first-child {
-    font-size: 19px;
-    margin-bottom: 5px;
+    font-size: 1.1875rem;
+    margin-bottom: 0.3125rem;
 }
 
 .data p:last-child {
-    font-size: 50px;
+    font-size: 3.125rem;
     font-weight: bold;
 }
 
 .video-section {
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
+    width: 40%;
+    max-width: 900px;
+    margin-bottom: 1.25rem;
 }
 
 .error-section {
     display: flex;
     justify-content: space-between;
-    font-size: 30px;
+    font-size: 1.875rem;
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 1.25rem;
 }
 
 .video-section video {
-    /* box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5); */
     border-radius: 10px;
 }
 
@@ -93,6 +87,49 @@ main {
     display: block;
 }
 
+.button-section {
+    text-align: center;
+    margin-bottom: 0.625rem;
+    margin-top: 0.3125rem;
+}
+
+.button-description {
+    font-size: 1.125rem;
+    color: #666;
+    margin-bottom: 0.9375rem;
+}
+
+.save-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.9375rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.save-button:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.save-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#save-button-message {
+    width: 100%;
+    font-size: 1.125rem;
+    margin-top: 0.625rem;
+    color: #fd4646;
+    word-break: break-word;
+}
 
 @media (max-width: 768px) {
     .data-section {
@@ -100,6 +137,6 @@ main {
     }
     
     .data-section > div {
-        margin-bottom: 10px;
+        margin-bottom: 0.625rem;
     }
 }

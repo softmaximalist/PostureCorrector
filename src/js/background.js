@@ -6,7 +6,7 @@ after receiving messages from capture.js to warn the user about their bad postur
 */
 let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity, 
     firstWebcamNotSentToCapture, firstActivityNotSentToCapture;
-let iconPath = chrome.runtime.getURL("src/assets/icons/bird128.png");
+let iconPath = chrome.runtime.getURL("src/assets/icons/icon128.png");
 
 function initializeGlobalVariables() {
     const variablesToInit = {

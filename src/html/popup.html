@@ -5,7 +5,7 @@
 </head>
 <body>
     <header class="fixed-header">
-        <h1 class="extension-title"><img src="../assets/icons/bird128.png" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
+        <h1 class="extension-title"><img src="../assets/icons/square_logo.svg" alt="PostureCorrector Icon" class="title-icon">PostureCorrector</h1>
     </header>
     
     <div class="icon-nav-container">
@@ -19,8 +19,8 @@
         </a>
         <a href="statistics.html" target="_blank" class="icon-nav-link">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 3v18h18" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M18 17l-5-5-3 3-4-4" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 3v18h18" stroke="#595C5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M18 17l-5-5-3 3-4-4" stroke="#595C5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <span class="icon-tooltip">User Statistics</span>
         </a>
@@ -39,20 +39,6 @@
                 </div>
                 <div class="toggle-switch-wrapper">
                     <select id="webcamDropdown"></select>
-                </div>
-            </div>
-            <hr class="divider">
-            <div class="toggle-item">
-                <div class="toggle-description-wrapper">
-                    <span class="toggle-description">Turn extension ON/OFF</span>
-                </div>
-                <div class="toggle-switch-wrapper">
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="powerSwitch">
-                        <span class="slider round">
-                            <span class="toggle-text" id="powerText">OFF</span>
-                        </span>
-                    </label>
                 </div>
             </div>
             <hr class="divider">
@@ -83,15 +69,18 @@
             <hr class="divider">
             <div class="toggle-item">
                 <div class="toggle-description-wrapper">
-                    <span class="toggle-description">Save best posture to start</span>
+                    <span class="toggle-description">Turn extension ON/OFF</span>
                 </div>
                 <div class="toggle-switch-wrapper">
-                    <label class="toggle-switch">
-                        <button id="goodPosture">SAVE</button>
+                    <label id="toggle-switch">
+                        <input type="checkbox" id="powerSwitch" disabled>
+                        <span class="slider round">
+                            <span class="toggle-text" id="powerText">OFF</span>
+                        </span>
                     </label>
                 </div>
             </div>
-            <p id="saveButtonMessage"></p>
+            <p id="power-on-error-message"></p>
         </div>
     </div>
 

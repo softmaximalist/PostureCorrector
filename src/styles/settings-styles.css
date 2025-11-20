@@ -6,23 +6,22 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
     color: #444;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: #eeeeee;
 }
 
 header {
-    padding: 20px;
+    padding: 1.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .title {
-    font-family: Georgia, serif;
-    font-size: 55px;
+    font-size: 3.4375rem;
     display: flex;
     align-items: center;
 }
@@ -30,30 +29,30 @@ header {
 .title-icon {
     width: 60px;
     height: 60px;
-    margin-right: 10px;
-    margin-left: 40px;
+    margin-right: 0.625rem;
+    margin-left: 2.5rem;
 }
 
 /* Navigation links at the top right of the web page */
 .top-nav {
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-left: 40px;
-    margin-right: 40px;
-    font-size: 18px;
+    gap: 1.25rem;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+    font-size: 1.25rem;
     font-weight: bold;
 }
 
 .nav-link {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem;
     text-decoration: none;
     color: #444;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 5px;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    padding-bottom: 0.3125rem;
     transition: color 0.3s ease;
     cursor: pointer;
 }
@@ -63,8 +62,8 @@ header {
 }
 
 .nav-link.active {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
     border-bottom: 3px solid #fd4646;  /* Red underline for active page */
     color: #fd4646;
 }
@@ -84,7 +83,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 3.125rem 1.25rem;
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
@@ -92,19 +91,17 @@ main {
 
 .section {
     width: 100%;
-    margin-bottom: 50px;
+    margin-bottom: 3.125rem;
 }
 
 .section-title {
-    font-family: Georgia, serif;
-    font-size: 32px;
-    margin-bottom: 20px;
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
     color: #444;
 }
 
 .radio-container {
-    font-family: Arial, sans-serif;
-    gap: 20px;
+    gap: 1.25rem;
     display: flex;
     justify-content: space-between;
 }
@@ -113,17 +110,13 @@ main {
     flex: 1;
     display: flex;
     align-items: stretch;
-    margin-bottom: 15px;
+    margin-bottom: 0.9375rem;
     background-color: #ffffff;
     border: 3px solid #d6d6d6;
     border-radius: 10px;
     transition: all 0.2s ease;
     cursor: pointer;
 }
-
-/*.radio-item:last-child {
-    margin-bottom: 0;
-}*/
 
 .radio-item:hover {
     border-color: #BDBDBD;
@@ -139,7 +132,7 @@ main {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 20px;
+    padding: 1.25rem;
     cursor: pointer;
 }
 
@@ -150,15 +143,17 @@ main {
 }
 
 .radio-text-primary {
-    font-size: 18px;
+    font-size: 1.25rem;
     font-weight: bold;
     color: #333;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 .radio-text-secondary {
-    font-size: 15px;
+    font-size: 1.125rem;
     color: #666;
+    padding-left: 0.125rem;
+    padding-right: 0.125rem;
     line-height: 1.5;
 }
 
@@ -170,7 +165,7 @@ main {
 .advanced-section {
     background-color: #ffffff;
     border-radius: 10px;
-    padding: 30px;
+    padding: 1.875rem;
     max-width: 100%;
     margin: 0 auto;
     min-height: 200px;
@@ -178,7 +173,6 @@ main {
     align-items: flex-start;
     justify-content: flex-start;
     color: #666;
-    font-style: normal;
 }
 
 .advanced-content {
@@ -186,24 +180,23 @@ main {
 }
 
 .advanced-description {
-    font-size: 18px;
+    font-size: 1.125rem;
     color: #666;
     line-height: 1.6;
-    margin-bottom: 30px;
-    font-style: normal;
+    margin-bottom: 1.875rem;
 }
 
 .slider-group {
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    margin-bottom: 30px;
+    gap: 2.5rem;
+    margin-bottom: 1.875rem;
 }
 
 .slider-item {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1.25rem;
 }
 
 .slider-header {
@@ -213,13 +206,13 @@ main {
 }
 
 .slider-label {
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: bold;
     color: #333;
 }
 
 .slider-value {
-    font-size: 20px;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #fd4646;
     min-width: 40px;
@@ -271,17 +264,17 @@ main {
 .slider-range {
     display: flex;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: 1.125rem;
     color: #999;
-    padding: 0 2px;
+    padding: 0 0.125rem;
 }
 
 .reset-button {
     background-color: #fd4646;
     color: white;
     border: none;
-    padding: 12px 24px;
-    font-size: 15px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
     font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
@@ -311,51 +304,51 @@ main {
 
 @media (max-width: 768px) {
     .title {
-        font-size: 40px;
+        font-size: 2.5rem;
     }
 
     .title-icon {
         width: 45px;
         height: 45px;
-        margin-left: 20px;
+        margin-left: 1.25rem;
     }
     
     header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 15px;
+        gap: 0.9375rem;
     }
     
     .top-nav { 
-        margin-left: 40px;
+        margin-left: 2.5rem;
         margin-right: 0;
     }
 
     .section-title {
-        font-size: 26px;
+        font-size: 1.625rem;
     }
 
     .radio-item label {
-        padding: 15px;
+        padding: 0.9375rem;
     }
 
     .radio-text-primary {
-        font-size: 16px;
+        font-size: 1rem;
     }
 
     .radio-text-secondary {
-        font-size: 14px;
+        font-size: 0.875rem;
     }
     
     .advanced-description {
-        font-size: 16px;
+        font-size: 1rem;
     }
     
     .slider-label {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
     
     .slider-value {
-        font-size: 20px;
+        font-size: 1.25rem;
     }
 }

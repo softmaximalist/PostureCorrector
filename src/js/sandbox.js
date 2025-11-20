@@ -22,6 +22,7 @@ let canvas, context;
 let cv;
 let urls = {};
 let isFullyInitialized = false;
+let lastVideoTime = -1;
 
 function loadScript(url, timeout = 30000) {
     return new Promise((resolve, reject) => {
@@ -51,7 +52,7 @@ async function createFaceLandmarker() {
             baseOptions: {
                 modelAssetPath: urls.mediapipeModel,
             },
-            runningMode: "IMAGE",
+            runningMode: "VIDEO",
             numFaces: 1,
             minFaceDetectionConfidence: 0.5,
             minTrackingConfidence: 0.5
@@ -146,7 +147,13 @@ setupEventListener();
 
 function processFrame() {
     try {
-        results = faceLandmarker.detect(canvas);
+        let startTimeMs = performance.now();
+        if (startTimeMs <= lastVideoTime) {
+            startTimeMs = lastVideoTime + 1;
+        }
+        lastVideoTime = startTimeMs;
+        
+        results = faceLandmarker.detectForVideo(canvas, startTimeMs);
         if (results.faceLandmarks) {
             for (const landmarks of results.faceLandmarks) {
                 headWebcamDistance = Math.round(estimateHeadWebcamDistance(landmarks, canvas.height, canvas.width));
@@ -154,7 +161,6 @@ function processFrame() {
     
                 // Obtain calibration angles
                 if (typeof headPitchAngle === 'number' && goodHeadPitchAngleObtained) {
-            
                     adjustedHeadPitchAngle = Math.round(headPitchAngle - goodHeadPitchAngle);
                     if (sittingPostureIsBad(adjustedHeadPitchAngle, headWebcamDistance, goodHeadWebcamDistance)) { 
                         if (!countingBadPostureDuration) {

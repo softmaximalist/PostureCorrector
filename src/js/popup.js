@@ -1,9 +1,9 @@
 const dropdown = document.getElementById('webcamDropdown');
-const saveGoodPostureButton = document.getElementById("goodPosture");
 const activityRadioButtons = document.querySelectorAll('input[name="activity"]');
-const saveButtonMsgElement = document.getElementById('saveButtonMessage');
-let webcamRunning = false;
-let currentProcessingSpeed = "fast";
+const toggleSwitchElement = document.getElementById('toggle-switch');
+const powerSwitchElement = document.getElementById('powerSwitch');
+const powerOnErrorMsgElement = document.getElementById('power-on-error-message');
+let selectedDeviceId
 let currentActivity;
 
 async function getAllWebcams() {
@@ -27,7 +27,12 @@ async function createWebcamDropdown() {
     if (webcams.length > 0) {
         chrome.storage.local.get(['webcamId'], (result) => {
             if (result.webcamId) {
-                dropdown.value = result.webcamId;
+                const webcamExists = webcams.some(webcam => webcam.deviceId === result.webcamId);
+                if (webcamExists) {
+                    dropdown.value = result.webcamId;
+                } else {
+                    dropdown.value = webcams[0].deviceId;
+                }
             } else {
                 dropdown.value = webcams[0].deviceId;
             }
@@ -37,20 +42,36 @@ async function createWebcamDropdown() {
 }
 
 function handleWebcamSelection(event) {
-    // selectedDeviceId = dropdown.value;
-    const selectedDeviceId = event.target.value;
+    selectedDeviceId = event.target.value;
     chrome.storage.local.set({ webcamId: selectedDeviceId });
     chrome.runtime.sendMessage({ type: 'webcamSelected', selectedWebcam: selectedDeviceId });
+    updatePowerToggleState();
 }
 
 dropdown.addEventListener('change', handleWebcamSelection);
 
+function updatePowerToggleState() {
+    if (selectedDeviceId && currentActivity) {
+        powerSwitchElement.disabled = false;
+    } else {
+        powerSwitchElement.disabled = true;
+    }
+}
+
+toggleSwitchElement.addEventListener('click', function() {
+    if (powerSwitchElement.disabled) {
+        powerOnErrorMsgElement.textContent = "*Please select your webcam and activity first";
+        powerOnErrorMsgElement.scrollIntoView({ behavior: 'smooth' });
+    }
+});
+
 document.getElementById('powerSwitch').addEventListener('change', function() {
-    const isOn = this.checked;
-    webcamRunning = isOn;
-    this.nextElementSibling.querySelector('.toggle-text').textContent = isOn ? 'ON' : 'OFF';
-    chrome.storage.local.set({ extensionIsOn: isOn });
-    chrome.runtime.sendMessage({ type: 'powerButton', powerState: isOn });
+    if (selectedDeviceId && currentActivity) {
+        const isOn = this.checked;
+        this.nextElementSibling.querySelector('.toggle-text').textContent = isOn ? 'ON' : 'OFF';
+        chrome.storage.local.set({ extensionIsOn: isOn });
+        chrome.runtime.sendMessage({ type: 'powerButton', powerState: isOn });
+    }
 });
 
 activityRadioButtons.forEach(radio => {
@@ -59,25 +80,9 @@ activityRadioButtons.forEach(radio => {
             chrome.storage.local.set({ activity: radio.value });
             currentActivity = radio.value;
             chrome.runtime.sendMessage({ type: 'activity', activity: radio.value });
+            updatePowerToggleState();
         }
     });
-});
-
-saveGoodPostureButton.addEventListener('click', () => {
-    if (webcamRunning && currentProcessingSpeed && currentActivity) {
-        chrome.runtime.sendMessage({ type: 'saveGoodPosture' });
-        if (currentProcessingSpeed === 'fast') {
-            saveButtonMsgElement.textContent = '*Please maintain your best posture for 1 second to save it.';
-        } else if (currentProcessingSpeed === 'medium') {
-            saveButtonMsgElement.textContent = '*Please maintain your best posture for 2.5 seconds to save it.';
-        } else if (currentProcessingSpeed === 'slow') {
-            saveButtonMsgElement.textContent = '*Please maintain your best posture for 5 seconds to save it.';
-        }
-        saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        saveButtonMsgElement.textContent = "*Please turn on the extension and select your activity before you save your best posture.";
-        saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
-    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -88,19 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.extensionIsOn === true) {
                 document.getElementById('powerSwitch').checked = true;
                 document.getElementById('powerText').textContent = 'ON';
-                webcamRunning = true;
             } else if (result.extensionIsOn === false) {
                 document.getElementById('powerSwitch').checked = false;
                 document.getElementById('powerText').textContent = 'OFF';
-                webcamRunning = false;
             }
-        }
-    });
-    
-    // Load saved processing speed
-    chrome.storage.local.get(['processingSpeed'], result => {
-        if (result.processingSpeed) {
-            currentProcessingSpeed = result.processingSpeed;
         }
     });
 
@@ -110,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 radio.checked = true;
                 currentActivity = radio.value;
                 chrome.runtime.sendMessage({ type: 'activity', activity: radio.value });
+                updatePowerToggleState();
             }
         });
     });
