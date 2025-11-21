@@ -1,0 +1,356 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #444;
+}
+
+.fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: white; /* or any color that matches your design */
+    z-index: 1000;
+}
+
+.extension-title {
+    margin: 0;
+    padding: 0.9375rem 1.25rem;
+    font-weight: 900;
+    font-size: 1.625rem;
+    text-align: center;
+    border-bottom: 1px solid #cccccc; /* Optional: adds a subtle separator */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-icon {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+}
+
+/* Icon Navigation Container */
+.icon-nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 4.6875rem 1.875rem 0.3125rem 1.5625rem;
+    margin-top: 0;
+    margin-bottom: 0.3125rem;
+}
+
+/* Individual Icon Link */
+.icon-nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 45px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-icon-img {
+    width: 30px; /* Larger icon size */
+    height: 30px;
+}
+
+.icon-nav-link:hover {
+    transform: translateY(-5px);
+}
+
+.icon-nav-link:active {
+    transform: translateY(-2px);
+}
+
+/* Tooltip on Hover */
+.icon-tooltip {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 0.5rem 0.875rem;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, bottom 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 100;
+}
+
+/* Tooltip arrow */
+.icon-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid #333;
+}
+
+.icon-nav-link:hover .icon-tooltip {
+    opacity: 1;
+    bottom: -45px;
+}
+
+.nav-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.divider {
+    border: none;
+    height: 1px;
+    background-color: #cccccc;
+    margin: 0.9375rem;
+    width: 100%;
+}
+
+/* Override for dividers that need to extend beyond toggle-container padding */
+.toggle-container .divider {
+    width: calc(100% + 1.25rem); /* Extends 10px on each side to match .container width */
+    margin-left: -0.625rem; /* Shifts it left */
+}
+
+.container {
+    width: 320px; /* Set the maximum width you want */
+    padding: 0 1.875rem;
+    box-sizing: border-box;
+}
+
+select {
+    width: 100%;
+    padding: 0.3125rem;
+    margin: 0;
+    border-radius: 5px;
+}
+
+/* Container for the switches */
+.toggle-container {
+    padding: 0 0.625rem;
+}
+
+/* Container for each toggle item */
+.toggle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 0.8125rem;
+    margin-bottom: 0.8125rem;
+}
+
+.toggle-description-wrapper {
+    flex-grow: 1;
+    margin-right: 0.625rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Description text for each toggle */
+.toggle-description {
+    word-break: break-word; /* Ensure long text wraps to the next line */
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+#link {
+    display: block; /* Use flexbox */
+    text-align: center;
+    width: 100%;
+    color: #3c8cef;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+#webcamDropdown {
+    font-size: 1rem;
+    padding: 0.3125rem;
+    border-radius: 4px;
+    border-color: #fd4646;
+    background-color: #fff5f5;
+    border-width: 3px;
+}
+
+#webcamDropdown option {
+    color: #000; /* Text color for options */
+    background-color: #fff; /* Background color for options */
+}
+
+.link-wrapper {
+    display: flex; /* Use flexbox to align items */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100%; /* Ensure it takes up the full width of its parent */
+    margin-right: 0.625rem;
+    margin-bottom: 0.9375rem;
+}
+
+.toggle-switch-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 0.625rem;
+}
+
+/* Toggle switch style */
+#toggle-switch, .button {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+}
+
+#toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #c5c5c5;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #fd4646;
+}
+
+input:checked + .slider:before {
+    transform: translateX(46px);
+}
+
+.slider.round {
+    border-radius: 30px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Text inside the toggle switch */
+.toggle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8125rem;
+    color: white;
+    font-weight: 700;
+}
+
+input:checked + .slider .toggle-text {
+    left: 20px; /* Position text to the left of the circle */
+    right: auto;
+}
+
+input:not(:checked) + .slider .toggle-text {
+    right: 15px; /* Position text to the right of the circle */
+    left: auto;
+}
+
+/* 
+Radio Buttons 
+*/
+.radio-container {
+    margin-top: 0.8125rem;
+    margin-bottom: 0.8125rem;
+}
+
+.radio-section-title {
+    font-size: 1.125rem;
+    margin-top: 0;
+    margin-bottom: 0.625rem;
+    font-weight: bold;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.625rem;
+    background-color: #ffffff;
+    border: 3px solid #e0e0e0a3;
+    border-radius: 8px;
+    transition: all 0.1s ease;
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.radio-item:last-child {
+    margin-bottom: 0;
+}
+
+.radio-item input[type="radio"] {
+    display: none;
+}
+
+.radio-item label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem;
+    cursor: pointer;
+}
+
+.radio-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.radio-item .icon {
+    font-size: 1.25rem;
+    margin-right: 0.625rem;
+}
+
+.radio-item .radio-text {
+    font-size: 1.125rem;
+    font-weight: bold;
+}
+
+.radio-item:hover {
+    border-color: #BDBDBD;
+}
+
+.radio-item:has(input[type="radio"]:checked) {
+    border-color: #fd4646;
+    background-color: #fff5f5;
+    border-width: 3px;
+}
+
+#power-on-error-message {
+    width: 100%;
+    font-size: 1rem;
+    margin-top: 0.3125rem;
+    color: #fd4646;
+    word-break: break-word;
+}

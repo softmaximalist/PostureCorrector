@@ -1,0 +1,354 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #444;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #eeeeee;
+}
+
+header {
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 3.4375rem;
+    display: flex;
+    align-items: center;
+}
+
+.title-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 0.625rem;
+    margin-left: 2.5rem;
+}
+
+/* Navigation links at the top right of the web page */
+.top-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #444;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    padding-bottom: 0.3125rem;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.nav-link:hover {
+    color: #fd4646;
+}
+
+.nav-link.active {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    border-bottom: 3px solid #fd4646;  /* Red underline for active page */
+    color: #fd4646;
+}
+
+.nav-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-separator {
+    color: #999;
+    font-weight: normal;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3.125rem 1.25rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section {
+    width: 100%;
+    margin-bottom: 3.125rem;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    color: #444;
+}
+
+.radio-container {
+    gap: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.radio-item {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 0.9375rem;
+    background-color: #ffffff;
+    border: 3px solid #d6d6d6;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.radio-item:hover {
+    border-color: #BDBDBD;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.radio-item input[type="radio"] {
+    display: none;
+}
+
+.radio-item label {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1.25rem;
+    cursor: pointer;
+}
+
+.radio-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.radio-text-primary {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.radio-text-secondary {
+    font-size: 1.125rem;
+    color: #666;
+    padding-left: 0.125rem;
+    padding-right: 0.125rem;
+    line-height: 1.5;
+}
+
+.radio-item:has(input[type="radio"]:checked) {
+    border-color: #fd4646;
+    background-color: #fff5f5;
+}
+
+.advanced-section {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 1.875rem;
+    max-width: 100%;
+    margin: 0 auto;
+    min-height: 200px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: #666;
+}
+
+.advanced-content {
+    width: 100%;
+}
+
+.advanced-description {
+    font-size: 1.125rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.875rem;
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-bottom: 1.875rem;
+}
+
+.slider-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slider-label {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.slider-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fd4646;
+    min-width: 40px;
+    text-align: right;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #fd4646;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 8px rgba(253, 70, 70, 0.1);
+}
+
+.slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #fd4646;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 8px rgba(253, 70, 70, 0.1);
+}
+
+.slider-range {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.125rem;
+    color: #999;
+    padding: 0 0.125rem;
+}
+
+.reset-button {
+    background-color: #fd4646;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-self: flex-start;
+}
+
+.reset-button:hover {
+    background-color: #e63d3d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(253, 70, 70, 0.3);
+}
+
+.reset-button:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 968px) {
+    .radio-container {
+        flex-direction: column;  /* Stack cards vertically on smaller screens */
+    }
+
+    .radio-item {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .title-icon {
+        width: 45px;
+        height: 45px;
+        margin-left: 1.25rem;
+    }
+    
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.9375rem;
+    }
+    
+    .top-nav { 
+        margin-left: 2.5rem;
+        margin-right: 0;
+    }
+
+    .section-title {
+        font-size: 1.625rem;
+    }
+
+    .radio-item label {
+        padding: 0.9375rem;
+    }
+
+    .radio-text-primary {
+        font-size: 1rem;
+    }
+
+    .radio-text-secondary {
+        font-size: 0.875rem;
+    }
+    
+    .advanced-description {
+        font-size: 1rem;
+    }
+    
+    .slider-label {
+        font-size: 1.125rem;
+    }
+    
+    .slider-value {
+        font-size: 1.25rem;
+    }
+}

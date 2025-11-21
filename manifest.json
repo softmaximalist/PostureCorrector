@@ -1,30 +1,29 @@
 {
     "manifest_version": 3,
-    "name": "PostureCorrector: AI Posture Assistance App",
+    "name": "PostureCorrector",
     "version": "1.0.0",
     "description": "Uses real-time webcam footage to accurately detect bad posture and warn user.",
-    "permissions": ["tabs", "scripting", "storage", "notifications"],
-    "host_permissions": ["<all_urls>"],
+    "permissions": ["tabs", "storage", "notifications"],
     "background": {
-      "service_worker": "background.js"
+      "service_worker": "src/js/background.js"
     },
     "icons": {
-      "16": "icons/bird16.png",
-      "32": "icons/bird32.png",
-      "48": "icons/bird48.png",
-      "128": "icons/bird128.png"
+      "16": "src/assets/icons/icon16.png",
+      "32": "src/assets/icons/icon32.png",
+      "48": "src/assets/icons/icon48.png",
+      "128": "src/assets/icons/icon128.png"
     },
     "action": {
-      "default_popup": "popup.html",
+      "default_popup": "src/html/popup.html",
       "default_icon": {
-        "16": "icons/bird16.png",
-        "32": "icons/bird32.png",
-        "48": "icons/bird48.png",
-        "128": "icons/bird128.png"
+        "16": "src/assets/icons/icon16.png",
+        "32": "src/assets/icons/icon32.png",
+        "48": "src/assets/icons/icon48.png",
+        "128": "src/assets/icons/icon128.png"
       }
     },
     "sandbox": {
-      "pages": ["sandbox.html", "sandbox.js"]
+      "pages": ["src/html/sandbox.html"]
     }
-  }
+}
   
