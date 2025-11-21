@@ -1,12 +1,3 @@
-/*
-This file is mainly used to obtain the webcam stream, capture and send webcam video frames 
-to sandbox.js for processing. It also receives data for each frame sent. Using these data sent
-by sandbox.js, this file tracks and collects statistics such as bad posture percentage per day, 
-highest bad posture percentage, lowest bad posture percentage, averge bad posture percentage
-per each 3-hour time windows, and average bad posture percentage per each activity. It also sends
-messages to background.js so that background.js can blur user's browser tabs or send desktop 
-notifications to warn their bad posture. 
-*/
 let imageCapture;
 let videoTrack;
 let webcamRunning = false;

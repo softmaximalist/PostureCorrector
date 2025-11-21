@@ -1,34 +1,30 @@
-/*
-This file is used obtain user statistics stored in the local storage and plot them.
- */
-
-// import {
-//   Chart,
-//   LineController,
-//   LineElement,
-//   PointElement,
-//   BarController,
-//   BarElement,
-//   CategoryScale,
-//   LinearScale,
-//   Title,
-//   Tooltip,
-//   Legend,
-// } from 'chart.js';
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
  
-// // Register only the bits we need
-// Chart.register(
-//   LineController,
-//   LineElement,
-//   PointElement,
-//   BarController,
-//   BarElement,
-//   CategoryScale,
-//   LinearScale,
-//   Title,
-//   Tooltip,
-//   Legend
-// );
+// Register only the bits we need
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
  
 let stats;
 let dataArray;

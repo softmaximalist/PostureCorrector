@@ -1,9 +1,3 @@
-/*
-This file opens a browser tab using capture.html which has capture.js as the src of a script tag.
-It also forwards messages from popup.js to capture.js such as the webcam selected, the activity type selected, 
-and the warning method selected. Lastly, this file sends a desktop notification or blur and unblur browser tabs
-after receiving messages from capture.js to warn the user about their bad posture.
-*/
 let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity, 
     firstWebcamNotSentToCapture, firstActivityNotSentToCapture;
 let iconPath = chrome.runtime.getURL("src/assets/icons/icon128.png");

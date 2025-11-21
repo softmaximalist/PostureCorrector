@@ -1,8 +1,3 @@
-/*
-This file receives webcam video frames from capture.js and process them to detect user's posture. 
-For each frame sent by capture.js, sandbox.js returns back some data which includes the consecutive
-bad posture duration. 
-*/
 let faceLandmarker = null;
 let goodHeadPitchAngleObtained = false;
 let goodHeadPitchAngle = null;
