@@ -238,11 +238,11 @@ function stopCapture() {
 window.addEventListener('message', (event) => {
     if (event.data.type === 'sandboxListenerReady') {
         const urls = {
-          mediapipeVisionBundle: chrome.runtime.getURL('src/assets/mediapipe/vision_bundle.mjs'),
-          mediapipeWasmDir: chrome.runtime.getURL('src/assets/mediapipe/'),
-          mediapipeModel: chrome.runtime.getURL('src/assets/mediapipe/face_landmarker.task'),
-          opencvJs: chrome.runtime.getURL('src/assets/opencv/opencv.js'),
-          opencvWasm: chrome.runtime.getURL('src/assets/opencv/opencv_js.wasm')
+          mediapipeVisionBundle: chrome.runtime.getURL('assets/mediapipe/vision_bundle.mjs'),
+          mediapipeWasmDir: chrome.runtime.getURL('assets/mediapipe/'),
+          mediapipeModel: chrome.runtime.getURL('assets/mediapipe/face_landmarker.task'),
+          opencvJs: chrome.runtime.getURL('assets/opencv/opencv.js'),
+          opencvWasm: chrome.runtime.getURL('assets/opencv/opencv_js.wasm')
         };
         sandboxElement.contentWindow.postMessage({ type: 'initUrls', urls: urls }, '*');
     } else if (event.data.type === 'sandboxIsReady') { 
