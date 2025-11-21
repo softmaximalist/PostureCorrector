@@ -111,7 +111,7 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 function openCaptureTab() {
     // Use chrome.runtime.getURL to get the full extension URL from the root
-    const captureUrl = chrome.runtime.getURL('src/html/capture.html');
+    const captureUrl = chrome.runtime.getURL('html/capture.html');
     chrome.windows.getCurrent((window) => {
         chrome.tabs.create({ url: captureUrl, active: true }, (tab) => {
             try {
