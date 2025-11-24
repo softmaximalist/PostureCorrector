@@ -1,7 +1,7 @@
 
 html {
-    /* Scale based on viewport width - adjusts automatically for different scaling/resolutions */
-    font-size: calc(14px + 0.2vw);
+    /* Scale based on viewport width */
+    font-size: calc(14px + 0.15vw);
 }
 
 * {
