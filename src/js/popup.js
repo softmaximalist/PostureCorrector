@@ -6,43 +6,61 @@ const powerOnErrorMsgElement = document.getElementById('power-on-error-message')
 let selectedDeviceId
 let currentActivity;
 
-async function getAllWebcams() {
+async function createWebcamDropdown() {
+    // Get devices. If camera permission is not granted, labels will be empty strings "".
     const devices = await navigator.mediaDevices.enumerateDevices();
     const videoDevices = devices.filter(device => device.kind === 'videoinput');
-    return videoDevices;
-}
-
-async function createWebcamDropdown() {
-    const webcams = await getAllWebcams();
     dropdown.innerHTML = ''; // Clear existing options
     
-    webcams.forEach((webcam, index) => {
-        const option = document.createElement('option');
-        option.value = webcam.deviceId;
-        option.text = webcam.label || `Camera ${index + 1}`;
-        dropdown.appendChild(option);
-    });
+    // Check if the extension have camera permission
+    const hasPermission = videoDevices.length > 0 && videoDevices[0].label !== '';
 
-    // If webcams are detected, select the first one by default
-    if (webcams.length > 0) {
+    if (!hasPermission) {
+        // Camera permission not granted yet
+        // Create a dummy option so the user can still proceed
+        const option = document.createElement('option');
+        option.value = 'default'; 
+        option.text = "Default Camera (Permission required)";
+        dropdown.appendChild(option);
+        
+        // Treat 'default' as a valid selection to enable the UI
+        dropdown.value = 'default';
+        handleWebcamSelection({ target: dropdown });
+        return; 
+    }
+
+    // If camera permission has been granted, proceed as usual
+    if (videoDevices.length > 0) {
+        videoDevices.forEach((webcam, index) => {
+            const option = document.createElement('option');
+            option.value = webcam.deviceId;
+            option.text = webcam.label || `Camera ${index + 1}`;
+            dropdown.appendChild(option);
+        });
+
+        // Load saved selection or default to first
         chrome.storage.local.get(['webcamId'], (result) => {
             if (result.webcamId) {
-                const webcamExists = webcams.some(webcam => webcam.deviceId === result.webcamId);
-                if (webcamExists) {
-                    dropdown.value = result.webcamId;
-                } else {
-                    dropdown.value = webcams[0].deviceId;
-                }
+                const webcamExists = videoDevices.some(webcam => webcam.deviceId === result.webcamId);
+                dropdown.value = webcamExists ? result.webcamId : videoDevices[0].deviceId;
             } else {
-                dropdown.value = webcams[0].deviceId;
+                dropdown.value = videoDevices[0].deviceId;
             }
             handleWebcamSelection({ target: dropdown });
         });
+    } else {
+        // Edge case: Permission granted, but NO cameras connected
+        const option = document.createElement('option');
+        option.text = "No cameras found";
+        dropdown.appendChild(option);
+        // Disable start if no hardware
+        selectedDeviceId = null;
+        updatePowerToggleState();
     }
 }
 
 function handleWebcamSelection(event) {
-    selectedDeviceId = event.target.value;
+    selectedDeviceId = event.target.value;    
     chrome.storage.local.set({ webcamId: selectedDeviceId });
     chrome.runtime.sendMessage({ type: 'webcamSelected', selectedWebcam: selectedDeviceId });
     updatePowerToggleState();
