@@ -179,12 +179,14 @@ function setProcessingSpeedAndStartWebcam(processingSpeed) {
 
 function startWebcam(deviceId, processingSpeed) {
     stopCapture();
+    const shouldUseSpecificId = deviceId && deviceId !== 'default';    
+    // 'true' means "give me the default camera and ask for camera permission if needed"
+    const videoConstraints = shouldUseSpecificId ? { deviceId: { exact: deviceId } } : true;
     const constraints = {
-        video: {
-            deviceId: deviceId ? { exact: deviceId } : undefined
-        },
+        video: videoConstraints,
         audio: false
     };
+    
     navigator.mediaDevices.getUserMedia(constraints)
         .then(stream => {
             videoElement.srcObject = stream;
@@ -194,9 +196,20 @@ function startWebcam(deviceId, processingSpeed) {
                 webcamRunning = true;
                 width = videoElement.videoWidth;
                 height = videoElement.videoHeight;
-                sandboxElement.contentWindow.postMessage({ type: 'frameSize', width: width, height: height }, '*');
-                buffer = new ArrayBuffer(width * height * 4);  // RGBA
+                
+                // If we started with 'default', we now have the camera permission.
+                // Save the actual device ID so the popup dropdown works correctly next time.
+                const track = stream.getVideoTracks()[0];
+                const settings = track.getSettings();
+                if (settings.deviceId && (!currentSelectedWebcam || currentSelectedWebcam === 'default')) {
+                    currentSelectedWebcam = settings.deviceId;
+                    chrome.storage.local.set({ webcamId: currentSelectedWebcam });
+                    // Notify background so it stays in sync
+                    chrome.runtime.sendMessage({ type: 'webcam', selectedWebcam: currentSelectedWebcam });
+                }
 
+                sandboxElement.contentWindow.postMessage({ type: 'frameSize', width: width, height: height }, '*');
+                buffer = new ArrayBuffer(width * height * 4); 
                 canvas = new OffscreenCanvas(width, height);
                 canvas.width = width;
                 canvas.height = height;
@@ -206,6 +219,20 @@ function startWebcam(deviceId, processingSpeed) {
         })
         .catch(err => {
             console.error("[Error accessing webcam] " + err);
+            // If permission denied in capture tab, show a clear message on screen
+            if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+                document.body.innerHTML = `
+                    <div style="color: black; text-align: center; margin-top: 20%; margin-left: 20%; margin-right: 20%">
+                        <h1 style="font-size: 2.5rem;">Camera Permission Required</h1>
+                        <p style="font-size: 1.3rem; margin-top: 3%;">
+                            PostureCorrector needs your permission to access your camera.
+                        </p>
+                        <p style="font-size: 1.3rem;">
+                            Follow <a href="https://www.youtube.com/watch?v=boIghG-QDuA" target="_blank">this video</a> to grant the correct permissions once and for all.
+                        </p>
+                    </div>
+                `;
+            }
         });
 }
 
