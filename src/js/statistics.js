@@ -12,7 +12,6 @@ import {
   Legend,
 } from 'chart.js';
  
-// Register only the bits we need
 Chart.register(
   LineController,
   LineElement,
