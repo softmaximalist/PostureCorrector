@@ -2,6 +2,20 @@ let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity,
     firstWebcamNotSentToCapture, firstActivityNotSentToCapture;
 let iconPath = chrome.runtime.getURL("assets/icons/icon128.png");
 
+chrome.runtime.onInstalled.addListener((details) => {
+    if (details.reason === 'install') {
+        chrome.tabs.create({
+            url: "https://poscorrector.netlify.app/#instructions",
+            active: true
+        })
+    } else if (details.reason === 'update') {
+        chrome.tabs.create({
+            url: "https://poscorrector.netlify.app/release-notes/",
+            active: true
+        })
+    }
+});
+
 function initializeGlobalVariables() {
     const variablesToInit = {
         captureIsReady: false,
@@ -159,8 +173,8 @@ function resetVariables() {
 function sendWarningNotification() {
     chrome.notifications.create('warningNotification', {
         type: 'basic',
-        title: 'Bad Posture Warning',
-        message: 'Bad posture has been detected for more than 5 seconds. Please correct your posture.',
+        title: 'PostureCorrector: Warning',
+        message: 'Please correct your posture.',
         priority: 2,
         iconUrl: iconPath
     });
