@@ -111,12 +111,10 @@ function setupGoodPostureSaveButtonListener() {
                 clearTimeout(saveButtonMsgTimeoutId);
                 saveButtonMsgTimeoutId = setTimeout(() => { saveButtonMsgElement.textContent = ''; }, 6000);
             }
-            saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
         } else {
             saveButtonMsgElement.textContent = "*Please try again.";
             clearTimeout(saveButtonMsgTimeoutId);
             saveButtonMsgTimeoutId = setTimeout(() => { saveButtonMsgElement.textContent = ''; }, 4000);
-            saveButtonMsgElement.scrollIntoView({ behavior: 'smooth' });
         }
     });
 }

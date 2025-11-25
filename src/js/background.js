@@ -1,5 +1,4 @@
-let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity, 
-    firstWebcamNotSentToCapture, firstActivityNotSentToCapture;
+let captureIsReady, captureTabId, currentSelectedWebcam, currentActivity;
 let iconPath = chrome.runtime.getURL("assets/icons/icon128.png");
 
 chrome.runtime.onInstalled.addListener((details) => {
@@ -22,8 +21,6 @@ function initializeGlobalVariables() {
         captureTabId: null,
         currentSelectedWebcam: undefined,
         currentActivity: undefined,
-        firstWebcamNotSentToCapture: undefined,
-        firstActivityNotSentToCapture: undefined
     };
 
     chrome.storage.local.get(Object.keys(variablesToInit), (result) => {
@@ -31,16 +28,6 @@ function initializeGlobalVariables() {
         captureTabId = result.hasOwnProperty('captureTabId') ? result.captureTabId : variablesToInit.captureTabId;
         currentSelectedWebcam = result.hasOwnProperty('currentSelectedWebcam') ? result.currentSelectedWebcam : variablesToInit.currentSelectedWebcam;
         currentActivity = result.hasOwnProperty('currentActivity') ? result.currentActivity : variablesToInit.currentActivity;
-        if (result.hasOwnProperty('firstWebcamNotSentToCapture')) {
-            firstWebcamNotSentToCapture = result.firstWebcamNotSentToCapture;
-        } else {
-            firstWebcamNotSentToCapture = variablesToInit.firstWebcamNotSentToCapture;
-        }
-        if (result.hasOwnProperty('firstActivityNotSentToCapture')) {
-            firstActivityNotSentToCapture = result.firstActivityNotSentToCapture;
-        } else {
-            firstActivityNotSentToCapture = variablesToInit.firstActivityNotSentToCapture;
-        }
 
         // Special handling for captureTabId
         if (captureTabId !== null) {
@@ -88,9 +75,6 @@ function sendWebcamInfoToCapture(webcamId) {
     chrome.storage.local.set({ currentSelectedWebcam: currentSelectedWebcam });
     if (captureIsReady) {
         chrome.runtime.sendMessage({ type: 'webcam', selectedWebcam: currentSelectedWebcam });
-    } else {
-        firstWebcamNotSentToCapture = true;
-        chrome.storage.local.set({ firstWebcamNotSentToCapture: firstWebcamNotSentToCapture });
     }
 }
 
@@ -99,19 +83,16 @@ function sendActivityInfoToCapture(activity) {
     chrome.storage.local.set({ currentActivity: currentActivity });
     if (captureIsReady) {
         chrome.runtime.sendMessage({ type: 'activity', activity: currentActivity });
-    } else {
-        firstActivityNotSentToCapture = true;
-        chrome.storage.local.set({ firstActivityNotSentToCapture: firstActivityNotSentToCapture });
     }
 }
 
 function setCaptureToReady() {
     captureIsReady = true;
     chrome.storage.local.set({ captureIsReady: captureIsReady });
-    if (firstWebcamNotSentToCapture === true) {
+    if (currentSelectedWebcam) {
         chrome.runtime.sendMessage({ type: 'webcam', selectedWebcam: currentSelectedWebcam });  
     }
-    if (firstActivityNotSentToCapture === true) {
+    if (currentActivity) {
         chrome.runtime.sendMessage({ type: 'activity', activity: currentActivity });
     }
 }
@@ -149,10 +130,6 @@ function resetVariables() {
     const keysToRemove = [
         'captureIsReady',
         'captureTabId',
-        'currentSelectedWebcam',
-        'currentActivity',
-        'firstWebcamNotSentToCapture',
-        'firstActivityNotSentToCapture'
     ];
 
     chrome.storage.local.remove(keysToRemove, () => {
@@ -162,10 +139,6 @@ function resetVariables() {
             console.log('All specified variables removed from storage');
             captureIsReady = false;
             captureTabId = null;
-            currentSelectedWebcam = null;
-            currentActivity = null;
-            firstWebcamNotSentToCapture = null;
-            firstActivityNotSentToCapture = null;
         }
     });
 }
