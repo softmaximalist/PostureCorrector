@@ -1,5 +1,7 @@
 # PostureCorrector
-<img src="marquee_promo_tile.png" alt="PostureCorrector Logo" width="800">
+<p align="center">
+  <img src="marquee_promo_tile.png" alt="PostureCorrector Logo" width="600">
+</p>
 
 ___
 Copyright (c) 2025 Softmaximalist. All rights reserved.
