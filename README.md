@@ -1,62 +1,144 @@
+<div align="center">
+  <img src="logo.svg" alt="PostureCorrector Logo" width="600">
+  <br/>
+  <br/>
+  
+  <a href="[LINK_TO_CHROME_STORE]"><img src="https://img.shields.io/badge/Chrome_Web_Store-Available-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Chrome Web Store" /></a>
+  &nbsp;
+  <a href="[LINK_TO_MOZILLA_ADDONS]"><img src="https://img.shields.io/badge/Firefox_Add--ons-Available-FF7139?style=for-the-badge&logo=firefox-browser&logoColor=white" alt="Firefox Add-ons" /></a>
+  &nbsp;
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" /></a>
+</div>
+
+<br/>
+
 # PostureCorrector
-<p align="center">
-  <img src="marquee_promo_tile.png" alt="PostureCorrector Logo" width="600">
-</p>
+A lightweight, customizable browser extension that detects slouching in real-time and alerts users through desktop notifications.
 
-___
-Copyright (c) 2025 Softmaximalist. All rights reserved.
+---
 
-## Notice
-This repository is for code review purposes only. 
-- No permission is granted for any use, modification, or distribution of this code
-- All rights are reserved by the author
-- The code is shared publicly solely for portfolio/review purposes
+## 📋 Table of Contents
 
-## Links
-- [Product website](https://posturecorrector.vercel.app/)
-- [Chrome webstore page](https://chromewebstore.google.com/detail/posturecorrector-ai-postu/glbckpboobaemcfljiijgndjlkcokppi?authuser=1&hl=en)
+1. [Overview](#-overview)
+2. [Architecture](#-architecture)
+3. [Technical Decisions](#-technical-decisions)
+4. [Project Structure](#-project-structure)
+5. [Installation & Setup](#-installation--setup)
+6. [Build & Release](#-build--release)
 
-## Chrome extension files
-### manifest.json
-- specifies basic metadata and functionality of the extension
+---
 
-### icons/
-- Contains all the icon images for the extension
+## 🔭 Overview
 
-### opencv/
-- Contains the custom OpenCV.js built from source
+PostureCorrector is a lightweight browser extension that uses webcam footage to detect bad posture (i.e., slouching) in real-time and alert users through desktop notifications. It
+is also provides comprehensive posture statistics and allows user to customize and configure the extension for their settings and enviroment. 
 
-### styles/
-- Contains all the css files
+**Key Features:**
+*   **Smart Posture Detection:** PostureCorrector uses sophisticated computer vision algorithms to accurately detect your posture in real-time
+*   **Gentle Alerts:** Receive desktop notifications when bad posture is detected
+*   **Comprehensive Posture Statistics:** Understand your posture patterns with the detailed statistics and visualizations
+*   **Customizable Experience:** Choose your preferred webcam, tailor posture detection frequency, and adjust threshold values to customize and fine-tine the extension for your hardware and environment
+*   **Privacy:** Source-code is publicly available, your data never leaves your computer, and no external servers or data transmission
 
-### src/
-- Contains the main code files (html and javascript files) for the extension
-- Does not include the css files (these are contained the styles/ folder)
+---
 
-### popup.html, styles.css, popup.js
-- Files for the popup page of the browser extension
-- Allows the user to select the webcam they would like to use
-- Allows the user to select one of two different warning methods
-- Users can get warned by either receiving desktop notifications or getting all their browser tabs blurred
-- Allows the user to select their activity which will be used for the statistics that get displayed on the capture tab consisting of capture.html, capture-styles.css, and capture.js
-- popup.js saves the users' choice and loads them whenever the user reopens the popup page
+## 📂 Project Structure
 
-### content.js
-- Content script that is injected into the user's browser tabs
-- Contains code to blur and unblur the main content of the user's browser tabs
-- Receives messages from background.js and follows them to blur and unblur the tabs
+```text
+src/
+├── assets/
+│   ├── icons/          # App icons (16, 48, 128px)
+│   ├── mediapipe/      # MediaPipe WASM binaries and models
+│   ├── opencv/         # OpenCV.js library file
+│   └── popup_icons/    # UI specific assets
+├── html/
+│   ├── capture.html    # Handles getUserMedia & frame extraction
+│   ├── popup.html      # Main entry point for user interaction
+│   ├── sandbox.html    # ISOLATED: Runs OpenCV/MediaPipe logic
+│   ├── settings.html   # User configuration
+│   └── statistics.html # Visualization dashboard
+├── js/
+│   ├── background.js   # Service Worker (orchestrates messaging)
+│   ├── capture.js      # Logic for camera access
+│   ├── popup.js        # Popup UI logic
+│   ├── sandbox.js      # Logic for CV processing (The "Brain")
+│   ├── settings.js     # Saves/Loads config to chrome.storage
+│   └── statistics.js   # Renders Chart.js graphs
+├── styles/
+│   ├── capture-styles.css
+│   ├── popup-styles.css
+│   ├── settings-styles.css
+│   └── statistics-styles.css
+└── manifest.json       # Extension Configuration
+```
 
-### background.js
-- Service worker who keeps running the background
-- Receives messages from popup.js and creates a new browser tab using capture.html
+---
 
-### capture.html, capture-styles.css, capture.js
-- Files for the browser tab that get created when the user turns on the extension
-- Displays the webcam footage using the user's currently selected webcam
-- Displays graphs and charts that provide insight into the user's pattern of bad posture
-- Capture.js captures and sends the webcam frames to sandbox.js for processing and receives the results of processed frames back
-- Using the results of processed frames sent by sandbox.js, capture.js also tracks and records statistics such as bad posture percentage per each 3-hour time window (12am - 3am, 3am - 6am, ..., 9pm - 12am) and bad posture percentage per each user activity (work, study, entertainment)
+## 🧩 Architecture
 
-### sandbox.html, sandbox.js
-- Given the raw webcam frames by capture.js, sandbox.js process these frames using OpenCV and Mediapipe to detect user's posture
-- After processing each frame, sandbox.js sends the results to capture.js
+This project utilizes the **Manifest V3** for the Chrome Web Store version and **Manifest V2** for the Firefox Add-ons version. 
+It uses the **Sandboxed Offloading Pattern**. Since Manifest V3 restricts `eval()` and `WASM` compilation in standard extension 
+pages, we offload the heavy computer vision processing to a sandboxed iframe (`sandbox.html`).
+
+### Data Flow
+
+```mermaid
+graph TD
+    subgraph "Extension UI"
+        Popup["Popup UI"]
+        Stats["Statistics Page"]
+    end
+
+    subgraph "Background Context"
+        SW["Service Worker (background.js)"]
+    end
+
+    subgraph "Capture Context"
+        Capture["Capture.html (Offscreen)"]
+        Cam(("Camera Input"))
+    end
+
+    subgraph "Sandboxed Environment"
+        Sandbox["Sandbox.html"]
+        MP["MediaPipe (Face Landmarks)"]
+        CV["OpenCV.js (Geometry Calc)"]
+    end
+
+    %% Flows
+    Cam -->|"Raw Frames"| Capture
+    Capture -->|"Message (Frame Data)"| Sandbox
+    
+    %% CV Logic Flow
+    Sandbox --"Input Frame"--> MP
+    MP --"Facial Landmarks"--> CV
+    CV --"Pitch & Distance"--> Sandbox
+    
+    %% Results Flow
+    Sandbox -->|"Message (Analysis)"| SW
+    SW -->|"Update State"| Stats
+    
+    Stats --"Visualize"--> ChartJS["Chart.js"]
+```
+
+---
+
+## 💡 Technical Decisions
+
+A simple, lightweight, and client-side only architecture was prioritized to ensure privacy and performance without needing a backend server.
+
+| Technology/Component | Choice | Motivation |
+| :--- | :--- | :--- |
+| **Language** | **JavaScript** | Browser extensions rely heavily on passing loose objects (messages) between scripts. TypeScript ensures strict typing for these contracts, preventing runtime errors. |
+| **Styling** | **CSS** | Separate CSS files (popup-styles.css, settings-styles.css) keep styles scoped to their specific HTML views, preventing style leakage. |
+| **Build Tool** | **Bun** | Bun provides an extremely fast, zero-config way to bundle and minify plain HTML/CSS/JS while keeping the tooling lightweight. |
+| **Landmark Detection** | **MediaPipe** | Selected for its lightweight, pre-trained Face Mesh model. It provides robust landmark coordinates directly in the browser more efficiently than training a custom model. |
+| **Geometric Logic** | **OpenCV.js** | Used specifically for post-processing landmarks. Once MediaPipe provides the points, OpenCV efficiently handles the vector mathematics to calculate pitch angles and distance ratios. |
+| **Execution** | **Sandboxed Page** | Required by Manifest V3. This isolates the heavy WASM execution (MediaPipe/OpenCV) from the extension's main process, preventing CSP violations and keeping the UI responsive. |
+| **Visualization** | **Chart.js** | A lightweight canvas library chosen to render the real-time posture data streams without the overhead of heavier data science libraries. |
+
+---
+
+## 📄 License
+
+Distributed under the X License. See `LICENSE` for more information.
+```
