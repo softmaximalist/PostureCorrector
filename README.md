@@ -180,4 +180,3 @@ A simple, lightweight, and client-side only architecture was prioritized to ensu
 ## 📄 License
 
 Distributed under the AGPL-3.0 license. See `LICENSE` for more information.
-```
