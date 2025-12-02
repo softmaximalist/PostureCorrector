@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="logo.svg" alt="PostureCorrector Logo" width="600">
+  <img src="logo.png" alt="PostureCorrector Logo">
   <br/>
   <br/>
   
