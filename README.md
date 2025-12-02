@@ -47,10 +47,10 @@ is also provides comprehensive posture statistics and allows user to customize a
 ```text
 src/
 ├── assets/
-│   ├── icons/          # App icons (16, 48, 128px)
+│   ├── icons/          # PostureCorrector icons (16, 48, 128px)
 │   ├── mediapipe/      # MediaPipe WASM binaries and models
-│   ├── opencv/         # OpenCV.js library file
-│   └── popup_icons/    # UI specific assets
+│   ├── opencv/         # OpenCV.js library files
+│   └── popup_icons/    # Icons for the navigation links in the popup
 ├── html/
 │   ├── capture.html    # Handles getUserMedia & frame extraction
 │   ├── popup.html      # Main entry point for user interaction
@@ -59,9 +59,9 @@ src/
 │   └── statistics.html # Visualization dashboard
 ├── js/
 │   ├── background.js   # Service Worker (orchestrates messaging)
-│   ├── capture.js      # Logic for camera access
+│   ├── capture.js      # Logic for camera access, statistics calculation and storage
 │   ├── popup.js        # Popup UI logic
-│   ├── sandbox.js      # Logic for CV processing (The "Brain")
+│   ├── sandbox.js      # Logic for computer vision algorithm
 │   ├── settings.js     # Saves/Loads config to chrome.storage
 │   └── statistics.js   # Renders Chart.js graphs
 ├── styles/
@@ -131,8 +131,8 @@ A simple, lightweight, and client-side only architecture was prioritized to ensu
 | **Language** | **JavaScript** | Browser extensions rely heavily on passing loose objects (messages) between scripts. TypeScript ensures strict typing for these contracts, preventing runtime errors. |
 | **Styling** | **CSS** | Separate CSS files (popup-styles.css, settings-styles.css) keep styles scoped to their specific HTML views, preventing style leakage. |
 | **Build Tool** | **Bun** | Bun provides an extremely fast, zero-config way to bundle and minify plain HTML/CSS/JS while keeping the tooling lightweight. |
-| **Landmark Detection** | **MediaPipe** | Selected for its lightweight, pre-trained Face Mesh model. It provides robust landmark coordinates directly in the browser more efficiently than training a custom model. |
-| **Geometric Logic** | **OpenCV.js** | Used specifically for post-processing landmarks. Once MediaPipe provides the points, OpenCV efficiently handles the vector mathematics to calculate pitch angles and distance ratios. |
+| **Facial Landmark Detection** | **MediaPipe** | Selected for its lightweight, pre-trained Face Mesh model. It provides robust landmark coordinates directly in the browser more efficiently than training a custom model. |
+| **Computer Vision Algorithm** | **OpenCV.js** | Used specifically for post-processing landmarks. Once MediaPipe provides the points, OpenCV efficiently handles the vector mathematics to calculate pitch angle of the  and head-to-webcam distance. |
 | **Execution** | **Sandboxed Page** | Required by Manifest V3. This isolates the heavy WASM execution (MediaPipe/OpenCV) from the extension's main process, preventing CSP violations and keeping the UI responsive. |
 | **Visualization** | **Chart.js** | A lightweight canvas library chosen to render the real-time posture data streams without the overhead of heavier data science libraries. |
 
