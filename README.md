@@ -1,7 +1,6 @@
 <div align="center">
   <img src="logo.png" alt="PostureCorrector Logo">
   <br/>
-  <br/>
   
   <a href="[LINK_TO_CHROME_STORE]"><img src="https://img.shields.io/badge/Chrome_Web_Store-Available-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Chrome Web Store" /></a>
   &nbsp;
@@ -140,5 +139,5 @@ A simple, lightweight, and client-side only architecture was prioritized to ensu
 
 ## 📄 License
 
-Distributed under the X License. See `LICENSE` for more information.
+Distributed under the AGPL-3.0 license. See `LICENSE` for more information.
 ```
