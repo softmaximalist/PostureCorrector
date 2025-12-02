@@ -1,18 +1,12 @@
 <div align="center">
   <img src="logo.png" alt="PostureCorrector Logo">
-  <br/>
-  
-  <a href="[LINK_TO_CHROME_STORE]"><img src="https://img.shields.io/badge/Chrome_Web_Store-Available-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Chrome Web Store" /></a>
-  &nbsp;
-  <a href="[LINK_TO_MOZILLA_ADDONS]"><img src="https://img.shields.io/badge/Firefox_Add--ons-Available-FF7139?style=for-the-badge&logo=firefox-browser&logoColor=white" alt="Firefox Add-ons" /></a>
-  &nbsp;
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" /></a>
+
+  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/glbckpboobaemcfljiijgndjlkcokppi?label=Chrome%20Web%20Store&color=4285F4)](https://chrome.google.com/webstore/detail/glbckpboobaemcfljiijgndjlkcokppi)
+  [![Mozilla Add-ons](https://img.shields.io/amo/v/posturecorrector?label=Mozilla%20Add-ons&color=FF7139)](https://addons.mozilla.org/firefox/addon/posturecorrector/)
+  [![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/glbckpboobaemcfljiijgndjlkcokppi?label=Chrome%20Web%20Store%20Users&color=4285F4)](https://chrome.google.com/webstore/detail/glbckpboobaemcfljiijgndjlkcokppi)
+  [![Mozilla Add-ons Users](https://img.shields.io/amo/users/posturecorrector?label=Mozilla%20Add-ons%20Users&color=FF7139)](https://addons.mozilla.org/firefox/addon/posturecorrector/)
+  [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blueviolet)](./LICENSE)
 </div>
-
-<br/>
-
-# PostureCorrector
-A lightweight, customizable browser extension that detects slouching in real-time and alerts users through desktop notifications.
 
 ---
 
