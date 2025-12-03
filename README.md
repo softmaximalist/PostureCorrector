@@ -13,11 +13,10 @@
 ## 📋 Table of Contents
 
 1. [Overview](#-overview)
-2. [Architecture](#-architecture)
-3. [Technical Decisions](#-technical-decisions)
-4. [Project Structure](#-project-structure)
-5. [Installation & Setup](#-installation--setup)
-6. [Build & Release](#-build--release)
+2. [Project Structure](#-project-structure)
+3. [Architecture](#-architecture)
+4. [Technical Decisions](#-technical-decisions)
+5. [License](#-license)
 
 ---
 
