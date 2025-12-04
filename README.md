@@ -23,7 +23,7 @@
 ## 🔭 Overview
 
 PostureCorrector is a lightweight browser extension that uses webcam footage to detect bad posture (i.e., slouching) in real-time and alert users through desktop notifications. It
-is also provides comprehensive posture statistics and allows user to customize and configure the extension for their settings and enviroment. 
+also provides comprehensive posture statistics and allows user to customize and configure the extension for their settings and enviroment. 
 
 **Key Features:**
 *   **Smart Posture Detection:** PostureCorrector uses sophisticated computer vision algorithms to accurately detect your posture in real-time
