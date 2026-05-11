@@ -69,7 +69,7 @@ src/
 ## 🧩 Architecture
 
 This project utilizes the **Manifest V3** for the Chrome Web Store version and **Manifest V2** for the Firefox Add-ons version. 
-It uses the **Sandboxed Offloading Pattern**. Since Manifest V3 restricts `eval()` and `WASM` compilation in standard extension 
+Since Manifest V3 restricts `eval()` and `WASM` compilation in standard extension 
 pages, we offload the heavy computer vision processing to a sandboxed iframe (`sandbox.html`).
 
 ### Data Flow
